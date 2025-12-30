@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-jumpapay-blue: #2AB0E5;
+  --color-jumpapay-dark: #1E293B;
+  --spacing-container: 1300px;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+}
+
+.swiper {
+  display: block !important;
+  width: 100% !important;
+}
+
+.swiper-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-pagination-bullet {
+  background: #2AB0E5 !important;
+  opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  width: 20px !important;
+  border-radius: 4px !important;
+}
