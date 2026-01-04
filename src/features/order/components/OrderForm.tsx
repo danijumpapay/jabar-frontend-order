@@ -41,8 +41,8 @@ export const OrderForm = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-12 items-start max-w-7xl mx-auto py-6">
-      <div className="w-full lg:w-[653px]">
+    <div className="flex flex-col lg:flex-row gap-12 items-start max-w-7xl mx-auto py-6 font-inter">
+      <div className="w-full lg:w-163.25">
         <div className="flex items-center gap-2 text-xs mb-4 font-medium">
           <button 
             onClick={() => resetOrder()} 
@@ -55,7 +55,7 @@ export const OrderForm = () => {
         </div>
 
         <div className="w-full flex justify-center lg:justify-start">
-          <div className="overflow-hidden mb-8 shadow-sm bg-gray-100 w-[380px] h-[253px] rounded-[16px] lg:w-[653px] lg:h-[417px] lg:rounded-[24px]">
+          <div className="overflow-hidden mb-8 shadow-sm bg-gray-100 w-95 h-63.25 rounded-2xl lg:w-163.25 lg:h-104.25 lg:rounded-3xl">
             <img 
               src={selectedService?.image || '/services/mutasi.png'} 
               alt={selectedService?.title} 
@@ -68,7 +68,7 @@ export const OrderForm = () => {
           {selectedService?.title || 'Mutasi STNK'}
         </h1>
 
-        <div className="bg-[#F8F9FA] p-8 rounded-[32px] border border-gray-100/50">
+        <div className="bg-[#F8F9FA] p-8 rounded-4xl border border-gray-100/50">
           <h3 className="font-bold text-gray-800 mb-3">Deskripsi:</h3>
           <div className={`text-gray-600 leading-relaxed text-sm transition-all duration-300 ${showFullDetail ? '' : 'line-clamp-3'}`}>
             {selectedService?.description || 
@@ -86,7 +86,7 @@ export const OrderForm = () => {
         </div>
       </div>
 
-      <div className="flex-1 w-full lg:max-w-[480px]">
+      <div className="flex-1 w-full lg:max-w-120">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label className="block text-sm font-bold text-gray-800 mb-2">Email (Untuk Pengiriman Invoice)</label>
@@ -163,7 +163,7 @@ export const OrderForm = () => {
             {errors.plateNumber && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.plateNumber.message}</p>}
           </div>
 
-          <div className="bg-[#F8F9FA] p-8 rounded-[32px] border border-gray-50/50">
+          <div className="bg-[#F8F9FA] p-8 rounded-4xl border border-gray-50/50">
             <h4 className="text-[16px] font-bold text-[#1A1A1A] mb-3">
               Dokumen yang Harus Disiapkan
             </h4>

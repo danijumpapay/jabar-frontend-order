@@ -6,6 +6,7 @@ interface Service {
   title: string;
   price: number;
   image: string;
+  description?: string; 
 }
 
 interface OrderData {
@@ -14,6 +15,11 @@ interface OrderData {
   plateNumber?: string;
   vehicleType?: 'Mobil' | 'Motor';
   statusMutasi?: 'Lengkap' | 'Submit' | 'Cabut';
+  jenisMutasi?: string;
+  jenisKendaraan?: string;
+  isDataMatch?: string;
+  kotaCabut?: string;
+  kotaTujuan?: string;
 }
 
 interface OrderState {
