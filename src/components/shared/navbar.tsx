@@ -49,7 +49,13 @@ export const Navbar = () => {
             >
               Cek Order
             </button>
-            <button className="border border-gray-200 text-gray-600 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 transition-all cursor-pointer">
+            <button 
+              onClick={() => {
+                setView('tutorial');
+                setIsOpen(false);
+              }}
+              className="border border-gray-200 text-gray-600 px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-50 transition-all cursor-pointer"
+            >
               Tutorial Order
             </button>
           </div>
@@ -67,7 +73,13 @@ export const Navbar = () => {
           >
             Cek Order
           </button>
-          <button className="w-full border border-gray-200 text-gray-600 px-5 py-3 rounded-xl text-sm font-semibold text-center">
+          <button 
+            onClick={() => {
+              setView('tutorial');
+              setIsOpen(false);
+            }}
+            className="w-full border border-gray-200 text-gray-600 px-5 py-3 rounded-xl text-sm font-semibold text-center"
+          >
             Tutorial Order
           </button>
         </div>

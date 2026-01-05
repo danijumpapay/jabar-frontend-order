@@ -24,11 +24,11 @@ interface OrderData {
 
 interface OrderState {
   step: number;
-  view: 'order' | 'tracking' | 'refund' | 'bantuan';
+  view: 'order' | 'tracking' | 'refund' | 'bantuan' | 'tutorial';
   selectedService: Service | null;
   orderData: OrderData;
   
-  setView: (view: 'order' | 'tracking' | 'refund' | 'bantuan') => void;
+  setView: (view: 'order' | 'tracking' | 'refund' | 'bantuan' | 'tutorial') => void;
   setService: (service: Service) => void;
   setOrderData: (data: Partial<OrderData>) => void;
   nextStep: () => void;
