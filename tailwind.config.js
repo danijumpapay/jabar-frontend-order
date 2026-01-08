@@ -8,9 +8,9 @@ export default {
     extend: {
       colors: {
         jumpapay: {
-          blue: '#2AB0E5',
-          dark: '#1E293B',
-        }
+          blue: '#27AAE1',
+          dark: '#1f89b6',
+        },
       }
     },
   },

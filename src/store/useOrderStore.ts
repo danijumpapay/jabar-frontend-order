@@ -13,10 +13,8 @@ interface OrderData {
   email?: string;
   whatsapp?: string;
   plateNumber?: string;
-  vehicleType?: 'Mobil' | 'Motor';
-  statusMutasi?: 'Lengkap' | 'Submit' | 'Cabut';
-  jenisMutasi?: string;
   jenisKendaraan?: string;
+  jenisMutasi?: string;
   isDataMatch?: string;
   kotaCabut?: string;
   kotaTujuan?: string;
@@ -29,6 +27,7 @@ interface OrderState {
   orderData: OrderData;
   
   setView: (view: 'order' | 'tracking' | 'refund' | 'bantuan' | 'tutorial') => void;
+  setStep: (step: number) => void;
   setService: (service: Service) => void;
   setOrderData: (data: Partial<OrderData>) => void;
   nextStep: () => void;
@@ -43,11 +42,14 @@ export const useOrderStore = create<OrderState>()(
       view: 'order',
       selectedService: null,
       orderData: {
-        vehicleType: 'Mobil',
-        statusMutasi: 'Lengkap',
+        jenisKendaraan: 'Mobil',
+        jenisMutasi: 'Lengkap',
+        isDataMatch: 'Ya'
       },
 
       setView: (view) => set({ view }),
+      
+      setStep: (step) => set({ step }),
 
       setService: (service) => 
         set({ selectedService: service, step: 2, view: 'order' }),
@@ -64,7 +66,16 @@ export const useOrderStore = create<OrderState>()(
         set((state) => ({ step: Math.max(1, state.step - 1), view: 'order' })),
 
       resetOrder: () => 
-        set({ step: 1, view: 'order', selectedService: null, orderData: { vehicleType: 'Mobil', statusMutasi: 'Lengkap' } }),
+        set({ 
+          step: 1, 
+          view: 'order', 
+          selectedService: null, 
+          orderData: { 
+            jenisKendaraan: 'Mobil', 
+            jenisMutasi: 'Lengkap', 
+            isDataMatch: 'Ya' 
+          } 
+        }),
     }),
     {
       name: 'jumpapay-order-storage',

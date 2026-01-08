@@ -1,0 +1,14 @@
+import { PaymentMethod } from '../types';
+
+export const instantPayments: PaymentMethod[] = [
+  { id: 'QRIS', name: 'QRIS', logo: '/payments/qris.svg' },
+  { id: 'DANA', name: 'DANA', logo: '/payments/dana.svg' },
+  { id: 'Gopay', name: 'Gopay', logo: '/payments/gopay.svg' },
+  { id: 'OVO', name: 'OVO', logo: '/payments/ovo.svg' },
+];
+
+export const bankTransfers: PaymentMethod[] = [
+  { id: 'BCA', name: 'BCA', logo: '/payments/bca.svg' },
+  { id: 'BNI', name: 'BNI', logo: '/payments/bni.svg' },
+  { id: 'Permata', name: 'Permata Bank', logo: '/payments/permata.svg' },
+];
