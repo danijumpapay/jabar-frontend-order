@@ -81,7 +81,7 @@ export const RefundPage = () => {
         setIsLoading(false);
         Swal.fire({
           title: 'Berhasil!',
-          text: 'Pengajuan refund Anda akan diproses dalam 3-5 hari kerja.',
+          text: 'Pengajuan refund Anda akan diproses dalam 5 hari kerja.',
           icon: 'success',
           confirmButtonColor: '#27AAE1'
         }).then(() => {
@@ -131,7 +131,7 @@ export const RefundPage = () => {
             </h4>
             <ul className="text-xs text-gray-600 space-y-3 list-disc ml-4 font-medium leading-relaxed">
               <li>Proses verifikasi refund membutuhkan waktu maksimal 24 jam kerja.</li>
-              <li>Dana akan ditransfer dalam 3-5 hari kerja setelah pengajuan disetujui.</li>
+              <li>Dana akan ditransfer dalam 5 hari kerja setelah pengajuan disetujui.</li>
               <li>Pastikan data rekening bank sudah sesuai untuk menghindari keterlambatan.</li>
             </ul>
           </Card>
