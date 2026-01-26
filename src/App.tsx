@@ -5,6 +5,7 @@ import { PaymentPage } from './pages/payment';
 import { WaitingPaymentPage } from './pages/payment/components/WaitingPaymentPage';
 import { PaymentSuccessPage } from './pages/payment/components/PaymentSuccessPage.tsx';
 import { DocumentUploadPage } from './pages/payment/components/DocumentUploadPage.tsx';
+import { PromoDetailPage } from './pages/promo/PromoDetailPage.tsx';
 import { TrackingPage } from './pages/tracking';
 import { RefundPage } from './pages/refund';
 import { HelpPage } from './pages/help';
@@ -16,6 +17,7 @@ function App() {
   const { step, view, setView, setStep, setOrderId } = useOrderStore(); 
 
   const renderContent = () => {
+    if (view === 'promo-detail') return <PromoDetailPage />;
     if (view === 'tracking') return <TrackingPage />;
     if (view === 'refund') return <RefundPage />;
     if (view === 'bantuan') return <HelpPage />;

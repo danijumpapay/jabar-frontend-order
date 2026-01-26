@@ -18,9 +18,6 @@ interface OrderData {
   isDataMatch?: string;
   kotaCabut?: string;
   kotaTujuan?: string;
-}
-
-interface OrderData {
   ktp?: File | null;
   stnk?: File | null;
   bpkb?: File | null;
@@ -28,14 +25,16 @@ interface OrderData {
 
 interface OrderState {
   step: number;
-  view: 'order' | 'tracking' | 'refund' | 'bantuan' | 'tutorial';
+  view: 'order' | 'tracking' | 'refund' | 'bantuan' | 'tutorial' | 'promo-detail';
   selectedService: Service | null;
+  selectedPromoId: string | null;
   orderData: OrderData;
   orderId: string | null;
   
-  setView: (view: 'order' | 'tracking' | 'refund' | 'bantuan' | 'tutorial') => void;
+  setView: (view: OrderState['view']) => void;
   setStep: (step: number) => void;
   setService: (service: Service) => void;
+  setSelectedPromoId: (id: string | null) => void;
   setOrderData: (data: Partial<OrderData>) => void;
   setOrderId: (id: string | null) => void;
   nextStep: () => void;
@@ -49,6 +48,7 @@ export const useOrderStore = create<OrderState>()(
       step: 1,
       view: 'order',
       selectedService: null,
+      selectedPromoId: null,
       orderId: null,
       orderData: {
         jenisKendaraan: 'Mobil',
@@ -62,6 +62,8 @@ export const useOrderStore = create<OrderState>()(
 
       setService: (service) => 
         set({ selectedService: service, step: 2, view: 'order' }),
+
+      setSelectedPromoId: (id) => set({ selectedPromoId: id }),
 
       setOrderData: (data) => 
         set((state) => ({ 
@@ -81,6 +83,7 @@ export const useOrderStore = create<OrderState>()(
           step: 1, 
           view: 'order', 
           selectedService: null, 
+          selectedPromoId: null,
           orderId: null,
           orderData: { 
             jenisKendaraan: 'Mobil', 
@@ -91,6 +94,15 @@ export const useOrderStore = create<OrderState>()(
     }),
     {
       name: 'jumpapay-order-storage',
+      partialize: (state) => ({
+        ...state,
+        orderData: {
+          ...state.orderData,
+          ktp: null,
+          stnk: null,
+          bpkb: null
+        }
+      })
     }
   )
 );

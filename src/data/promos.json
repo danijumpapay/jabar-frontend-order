@@ -1,0 +1,40 @@
+{
+  "planet-ban": {
+    "title": "Planet Ban x JumpaPay",
+    "bannerImg": "/banners/promo-planet-ban.png",
+    "badge": "Voucher Rp20.000",
+    "expiry": "Masa Aktif: 30 Hari",
+    "sections": [
+      {
+        "title": "Mekanisme Program",
+        "items": [
+          "Pelanggan berhak mendapatkan Voucher Belanja Planet Ban dengan nilai maksimal Rp20.000.",
+          "Voucher diberikan setelah berhasil menyelesaikan transaksi di JumpaPay.",
+          "Promo berlaku untuk semua jasa layanan STNK dan Pajak."
+        ]
+      },
+      {
+        "title": "Brand yang Berpartisipasi",
+        "items": [
+          "Berlaku untuk merk: Pirelli, Michelin, Dunlop, Aspira Premio, Presa, Planeto, IRC, Zeneos, dan Kenda."
+        ]
+      }
+    ]
+  },
+  "ganti-plat": {
+    "title": "Promo Plate Ban 2026",
+    "bannerImg": "/banners/promo-ganti-plat.png",
+    "badge": "Diskon 15%",
+    "expiry": "Hingga 31 Maret 2026",
+    "sections": [
+      {
+        "title": "Syarat & Ketentuan",
+        "items": [
+          "Khusus untuk layanan Ganti Plat 5 Tahunan.",
+          "Berlaku untuk kendaraan roda empat.",
+          "Wajib melampirkan foto STNK asli."
+        ]
+      }
+    ]
+  }
+}
