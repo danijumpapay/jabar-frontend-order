@@ -1,0 +1,27 @@
+{
+  "defaultFields": [
+    { "id": "name", "label": "Nama Lengkap", "type": "text", "required": true },
+    { "id": "email", "label": "Email", "info": "Digunakan untuk mengirim invoice pembayaran", "type": "email", "required": true },
+    { "id": "whatsapp", "label": "Nomor WhatsApp", "info": "Contoh: 88212345678 (langsung angka setelah 0)", "type": "tel", "required": true },
+    { "id": "plateNumber", "label": "Plat Nomor", "info": "Contoh: D 1234 ABC (wajib menggunakan spasi)", "type": "text", "required": true },
+    { "id": "no_rangka", "label": "5 digit terakhir nomor rangka kendaraan", "info": "dapat ditemukan di STNK", "type": "text", "required": true }
+  ],
+  "services": [
+    { "id": "1", "slug": "stnk-tahunan", "extraFields": [] },
+    { "id": "2", "slug": "stnk-5-tahun", "extraFields": [] },
+    { "id": "3", "slug": "balik-nama", "extraFields": [
+      { 
+        "id": "domisili_sama", 
+        "label": "Domisili Wilayah", 
+        "info": "Apakah proses balik nama dalam satu wilayah yang sama?",
+        "type": "select", 
+        "options": ["Ya", "Tidak"],
+        "required": true 
+      }
+    ]},
+    { "id": "4", "slug": "mutasi", "extraFields": [
+      { "id": "kota_tujuan", "label": "Kota Tujuan", "info": "Kota tujuan pindah berkas STNK Contoh : Bandung", "type": "text", "required": true }
+    ]},
+    { "id": "5", "slug": "blokir-plat", "extraFields": [] }
+  ]
+}
