@@ -36,12 +36,12 @@ export const ServiceGrid = () => {
             </div>
             <div className="pt-3 px-1">
               <h3 className="font-bold text-gray-800 text-sm md:text-base leading-tight">{item.title}</h3>
-              <div className="mt-2 flex flex-col">
+              {/* <div className="mt-2 flex flex-col">
                 <span className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Mulai dari</span>
                 <span className="font-bold text-akang-pajak-blue text-xs md:text-sm">
                   Rp{item.price.toLocaleString('id-ID')}
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
         ))}

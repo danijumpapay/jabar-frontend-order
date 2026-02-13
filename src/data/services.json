@@ -1,7 +1,4 @@
 [
   { "id": "1", "title": "Urus STNK Tahunan", "price": 40000, "image": "/services/tahunan.png", "slug": "stnk-tahunan" },
-  { "id": "2", "title": "Urus STNK 5 Tahun", "price": 50000, "image": "/services/5tahun.png", "slug": "stnk-5-tahun" },
-  { "id": "3", "title": "Balik Nama", "price": 200000, "image": "/services/balik-nama.png", "slug": "balik-nama" },
-  { "id": "4", "title": "Mutasi STNK", "price": 150000, "image": "/services/mutasi.png", "slug": "mutasi-stnk" },
-  { "id": "5", "title": "Blokir Nomor Plat", "price": 150000, "image": "/services/blokir.png", "slug": "blokir-plat" }
+  { "id": "2", "title": "Urus STNK 5 Tahun", "price": 50000, "image": "/services/5tahun.png", "slug": "stnk-5-tahun" }
 ]
