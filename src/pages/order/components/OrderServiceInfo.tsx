@@ -8,7 +8,7 @@ interface OrderServiceInfoProps {
   description?: string;
 }
 
-export const OrderServiceInfo = ({ title, image, description }: OrderServiceInfoProps) => {
+export const OrderServiceInfo = ({ title, description }: OrderServiceInfoProps) => {
   const [showFullDetail, setShowFullDetail] = useState(false);
 
   return (
