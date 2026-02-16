@@ -15,4 +15,4 @@ export const whatsappSteps: TutorialStep[] = [
   { id: 13, title: "Cek Status Order", desc: "Kode order akan dikirimkan lalu status order dapat dilihat dengan mengetik kode order.", phoneImage: "/tutorial/mutasi/phone-step-13.png" }
 ];
 
-export const categories: string[] = ["STNK Tahunan", "STNK 5 Tahunan", "Mutasi (Cabut Berkas)", "Mutasi (Submit Berkas)", "Mutasi Lengkap", "Balik Nama", "Blokir Plat"];
+export const categories: string[] = ["STNK Tahunan", "STNK 5 Tahunan", "Blokir Plat"];
