@@ -62,9 +62,9 @@ export const TrackingPage = () => {
 
   const currentOrderData = useMemo(() => {
     const baseData = {
-      nama: "Rayhan Alfaruq",
-      layanan: orderNumber === '12345' ? "Mutasi STNK" : "Pajak 1 Tahun",
-      harga: orderNumber === '12345' ? "Rp2.651.000" : "Rp240.000",
+      nama: "Dani Sofyan",
+      layanan: orderNumber === '12345' ? "Pajak 1 Tahun" : "Pajak 5 Tahun",
+      harga: orderNumber === '12345' ? "Rp346.500" : "Rp400.000",
       tanggal: "11/01/2026"
     };
 
@@ -81,8 +81,8 @@ export const TrackingPage = () => {
     if (orderNumber === '11111') {
       return [
         { title: "Verifikasi Dokumen", completed: true },
-        { title: "Pengambilan Dokumen", completed: true },
         { title: "Pengurusan Dokumen", completed: true },
+        { title: "Pengantaran Dokumen", completed: true },
         { title: "Selesai", completed: true },
       ];
     }
@@ -96,9 +96,9 @@ export const TrackingPage = () => {
     }
     return [
       { title: "Verifikasi Dokumen", completed: true },
-      { title: "Pengambilan Dokumen", completed: true },
-      { title: "Pengurusan Dokumen", completed: false },
-      { title: "Pengembalian Dokumen", completed: false },
+      { title: "Pengurusan Dokumen", completed: true },
+      { title: "Pengantaran Dokumen", completed: false },
+      { title: "Selesai", completed: false },
     ];
   }, [orderNumber]);
 

@@ -29,10 +29,9 @@ export const OrderServiceInfo = ({ title, image, description }: OrderServiceInfo
         </h1>
 
         <div className="bg-[#F8F9FA] p-6 md:p-8 rounded-3xl md:rounded-[40px] border border-gray-100">
-          <h3 className="font-bold text-gray-800 mb-3 text-sm md:text-base">Deskripsi:</h3>
           <div className={`text-gray-600 leading-relaxed text-sm transition-all duration-300 ${showFullDetail ? '' : 'line-clamp-3'}`}>
             {description || 
-            `Apakah kamu ingin pindah kota dan perlu untuk mutasi STNK agar kendaraan kamu juga bisa ganti nomor sesuai kotamu? Akang Pajak untuk bantu kamu urus proses Mutasi STNK. Kamu nggak perlu lagi bolak-balik cuma untuk urus administrasi berkas.`}
+            `Akang pajak merupakan Mitra resmi Bapenda Jabar dan Bank BJB untuk melayani pembayaran pajak kendaraan bermotor secara online di daerah Jawa Barat. Anda dapat melakukan pembayaran pajak kendaraan dengan mudah dan cepat tanpa harus datang ke kantor Samsat. Kami juga menyediakan berbagai layanan terkait pajak kendaraan seperti perpanjangan STNK, mutasi kendaraan, dan lain sebagainya. Dengan Akang Pajak, urusan pajak kendaraan Anda menjadi lebih praktis dan efisien.`}
           </div>
           
           <Button 

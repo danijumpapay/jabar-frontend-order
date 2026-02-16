@@ -1,13 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Clock, Copy, ChevronDown, ChevronUp, Landmark, Smartphone, Check } from 'lucide-react';
+import { Clock, Copy, ChevronDown, ChevronUp, Landmark, Smartphone, Check, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { useOrderStore } from '@/store/useOrderStore';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 
 export const WaitingPaymentPage = () => {
-  const { setStep } = useOrderStore();
+  const { setStep, orderData, resetOrder } = useOrderStore();
   const [openAccordion, setOpenAccordion] = useState<string | null>('atm');
   const [copied, setCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number>(24 * 60 * 60);
+  
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -30,8 +33,19 @@ export const WaitingPaymentPage = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const confirmCancel = () => {
+    setShowConfirmModal(false);
+    setShowSuccessModal(true);
+  };
+
+  const handleFinalExit = () => {
+    setShowSuccessModal(false);
+    resetOrder();
+    setStep(1);
+  };
+
   return (
-    <div className="max-w-3xl mx-auto md:py-8 space-y-8 font-inter animate-in fade-in duration-500">
+    <div className="md:py-8 space-y-8 font-inter animate-in fade-in duration-500">
       <div className="text-left">
         <Breadcrumbs 
           parentPage="Pembayaran" 
@@ -40,7 +54,7 @@ export const WaitingPaymentPage = () => {
         />
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-[32px] md:rounded-[40px] overflow-hidden shadow-sm">
+      <div className="max-w-3xl mx-auto bg-white border border-gray-100 rounded-[32px] md:rounded-[40px] overflow-hidden shadow-sm">
         <div className="p-8 md:p-10 text-center border-b border-gray-50 bg-gray-50/30">
           <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-600 px-4 py-2 rounded-full mb-4">
             <Clock size={16} className={timeLeft > 0 ? "animate-pulse" : ""} />
@@ -57,9 +71,9 @@ export const WaitingPaymentPage = () => {
             <div className="flex justify-between items-end">
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Metode Pembayaran</p>
-                <p className="font-bold text-gray-800">BCA Virtual Account</p>
+                <p className="font-bold text-gray-800">BJB Virtual Account</p>
               </div>
-              <img src="/payments/bca.svg" alt="BCA" className="h-6" />
+              <img src="/payments/bjb.svg" alt="BJB" className="h-10" />
             </div>
 
             <div className="bg-gray-50 rounded-2xl p-6 relative group">
@@ -89,7 +103,9 @@ export const WaitingPaymentPage = () => {
 
             <div className="flex justify-between items-center p-2">
               <span className="text-sm text-gray-500 font-medium">Total Tagihan</span>
-              <span className="text-xl font-black text-gray-900">Rp2.651.000</span>
+              <span className="text-xl font-black text-gray-900">
+                Rp{(orderData?.finalTotal || 0).toLocaleString('id-ID')}
+              </span>
             </div>
           </div>
 
@@ -102,7 +118,7 @@ export const WaitingPaymentPage = () => {
               >
                 <div className="flex items-center gap-3">
                   <Landmark size={18} className="text-gray-400" />
-                  <span className="text-sm font-bold text-gray-700">ATM BCA</span>
+                  <span className="text-sm font-bold text-gray-700">ATM BJB</span>
                 </div>
                 {openAccordion === 'atm' ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </button>
@@ -112,7 +128,7 @@ export const WaitingPaymentPage = () => {
                     <li>Masukkan Kartu ATM dan PIN Anda</li>
                     <li>Pilih menu <span className="text-gray-800 font-bold">Transaksi Lainnya</span></li>
                     <li>Pilih menu <span className="text-gray-800 font-bold">Transfer</span></li>
-                    <li>Pilih menu <span className="text-gray-800 font-bold">Ke Rekening BCA Virtual Account</span></li>
+                    <li>Pilih menu <span className="text-gray-800 font-bold">Ke Rekening BJB Virtual Account</span></li>
                     <li>Masukkan nomor VA diatas</li>
                     <li>Tagihan akan muncul, pilih <span className="text-gray-800 font-bold">Ya/OK</span></li>
                   </ol>
@@ -122,24 +138,24 @@ export const WaitingPaymentPage = () => {
 
             <div className="border border-gray-100 rounded-2xl overflow-hidden">
               <button 
-                onClick={() => setOpenAccordion(openAccordion === 'mbca' ? null : 'mbca')}
+                onClick={() => setOpenAccordion(openAccordion === 'mBJB' ? null : 'mBJB')}
                 className="w-full p-4 flex justify-between items-center hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <Smartphone size={18} className="text-gray-400" />
-                  <span className="text-sm font-bold text-gray-700">m-BCA (BCA Mobile)</span>
+                  <span className="text-sm font-bold text-gray-700">m-BJB (BJB Mobile)</span>
                 </div>
-                {openAccordion === 'mbca' ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                {openAccordion === 'mBJB' ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </button>
-              {openAccordion === 'mbca' && (
+              {openAccordion === 'mBJB' && (
                 <div className="p-4 pt-0 text-sm text-gray-500 leading-relaxed space-y-2 font-medium bg-white">
                   <ol className="list-decimal ml-4 space-y-2">
-                    <li>Login ke aplikasi m-BCA</li>
+                    <li>Login ke aplikasi m-BJB</li>
                     <li>Pilih menu <span className="text-gray-800 font-bold">m-Transfer</span></li>
-                    <li>Pilih <span className="text-gray-800 font-bold">BCA Virtual Account</span></li>
+                    <li>Pilih <span className="text-gray-800 font-bold">BJB Virtual Account</span></li>
                     <li>Input nomor VA yang tertera</li>
                     <li>Periksa detail tagihan, lalu klik <span className="text-gray-800 font-bold">Send</span></li>
-                    <li>Masukkan PIN m-BCA Anda</li>
+                    <li>Masukkan PIN m-BJB Anda</li>
                   </ol>
                 </div>
               )}
@@ -156,13 +172,61 @@ export const WaitingPaymentPage = () => {
             Saya Sudah Bayar
           </button>
           <button 
-            onClick={() => setStep(1)} 
+            onClick={() => setShowConfirmModal(true)} 
             className="w-full bg-white text-gray-500 py-4 rounded-2xl font-bold text-sm hover:text-red-500 transition-all"
           >
             Batalkan Pesanan
           </button>
         </div>
       </div>
+
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white rounded-[32px] w-full max-w-sm p-8 shadow-2xl animate-in zoom-in-95 duration-300 text-center space-y-6">
+            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto text-red-500">
+              <AlertTriangle size={40} />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-black text-gray-900">Batalkan Pesanan?</h3>
+              <p className="text-sm text-gray-500 font-medium">Apakah Anda yakin ingin membatalkan pesanan ini? Data yang sudah diisi akan hilang.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <button 
+                onClick={() => setShowConfirmModal(false)}
+                className="py-4 rounded-2xl font-bold text-sm text-gray-500 bg-gray-50 hover:bg-gray-100 transition-colors"
+              >
+                Kembali
+              </button>
+              <button 
+                onClick={confirmCancel}
+                className="py-4 rounded-2xl font-extrabold text-sm text-white bg-red-500 hover:bg-red-600 shadow-lg shadow-red-100 transition-colors"
+              >
+                Ya, Batalkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-110 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white rounded-[32px] w-full max-w-sm p-8 shadow-2xl animate-in zoom-in-95 duration-300 text-center space-y-6">
+            <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto text-green-500">
+              <CheckCircle2 size={40} />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-black text-gray-900">Berhasil Dibatalkan</h3>
+              <p className="text-sm text-gray-500 font-medium">Pesanan Anda telah berhasil dibatalkan secara permanen.</p>
+            </div>
+            <button 
+              onClick={handleFinalExit}
+              className="w-full py-4 rounded-2xl font-extrabold text-sm text-white bg-[#27AAE1] shadow-lg shadow-sky-100 transition-colors"
+            >
+              Kembali ke Beranda
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

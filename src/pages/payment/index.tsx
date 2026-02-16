@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useOrderStore } from '@/store/useOrderStore';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
-
 import { AddressModal } from './components/AddressModal';
 import { PickupTypeCard } from './components/PickupTypeCard';
 import { PaymentMethods } from './components/PaymentMethods';
@@ -19,6 +18,7 @@ export const PaymentPage = () => {
   const { selectedService, setStep } = useOrderStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState('QRIS');
+  const [deliveryFee, setDeliveryFee] = useState(19900);
 
   const [addressData, setAddressData] = useState<AddressData>({
     alamatLengkap: '',
@@ -55,7 +55,8 @@ export const PaymentPage = () => {
         <div className="lg:col-span-2 space-y-6">
           <PickupTypeCard 
             address={displayAddress} 
-            onEditAddress={() => setIsModalOpen(true)} 
+            onEditAddress={() => setIsModalOpen(true)}
+            onFeeChange={setDeliveryFee}
           />
           <PaymentMethods 
             selectedMethod={selectedMethod} 
@@ -67,13 +68,15 @@ export const PaymentPage = () => {
           <OrderSummary 
             serviceImage={selectedService?.image}
             serviceTitle={selectedService?.title}
+            deliveryFee={deliveryFee}
+            address={displayAddress}
             onPayClick={() => setStep(4)}
           />
         </div>
       </div>
 
       <AddressModal 
-        key={isModalOpen ? 'open' : 'closed'}
+        key={isModalOpen ? 'opened' : 'closed'}
         isOpen={isModalOpen}
         initialData={addressData}
         onSave={handleUpdateAddress}

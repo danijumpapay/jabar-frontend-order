@@ -1,30 +1,34 @@
 import { useState } from 'react';
 import { PriceDetailModal } from './PriceDetailModal';
-import { CheckCircle2, Ticket, XCircle } from 'lucide-react';
+import { CheckCircle2, Ticket, XCircle, AlertCircle } from 'lucide-react';
 import { useOrderStore } from '@/store/useOrderStore';
 
 interface OrderSummaryProps {
   serviceImage?: string;
   serviceTitle?: string;
+  deliveryFee: number;
+  address?: string;
   onPayClick?: () => void;
 }
 
-export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSummaryProps) => {
-  const { setStep, setOrderId } = useOrderStore();
+export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address, onPayClick }: OrderSummaryProps) => {
+  const { setStep, setOrderId, orderData, setOrderData } = useOrderStore();
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
   const [voucherCode, setVoucherCode] = useState('');
   const [appliedVoucherType, setAppliedVoucherType] = useState<'NONE' | 'DISCOUNT' | 'ONGKIR'>('NONE');
   const [voucherError, setVoucherError] = useState(false);
+  const [addressError, setAddressError] = useState(false);
 
-  const baseSubtotal = 2651000;
-  const originalPickupFee = 20000;
+  const baseSubtotal = 345600;
+  const adminFee = 10000;
   
   const isOngkirVoucher = appliedVoucherType === 'ONGKIR';
   const isDiscountVoucher = appliedVoucherType === 'DISCOUNT';
   
-  const currentPickupFee = isOngkirVoucher ? 0 : originalPickupFee;
+  const currentPickupFee = (isOngkirVoucher || deliveryFee === 0) ? 0 : deliveryFee;
   const discountAmount = isDiscountVoucher ? Math.round(baseSubtotal * 0.05) : 0;
-  const finalTotal = baseSubtotal - discountAmount + currentPickupFee;
+  
+  const finalTotal = baseSubtotal + adminFee + currentPickupFee - discountAmount;
 
   const handleApplyVoucher = () => {
     const code = voucherCode.trim().toLowerCase();
@@ -47,7 +51,23 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
   };
 
   const handlePayNow = () => {
+    const isAddressMissing = !address || 
+                             address.trim() === '' || 
+                             address.toLowerCase().includes('belum ada alamat');
+
+    if (deliveryFee > 0 && isAddressMissing) {
+      setAddressError(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    setAddressError(false);
     setOrderId("12345");
+    setOrderData({ 
+      ...orderData, 
+      finalTotal: finalTotal 
+    });
+
     if (onPayClick) {
       onPayClick();
     } else {
@@ -57,21 +77,21 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
   };
 
   const priceBreakdown = [
-    { label: 'Biaya Jasa', value: 2500000 },
-    { label: 'Biaya Penanganan', value: 100000 },
-    { label: 'PPN 11%', value: 51000 },
-    { label: 'Biaya Penjemputan', value: originalPickupFee },
+    { label: 'PKB Pokok', value: 90700 },
+    { label: 'PKB Denda', value: 0 },
+    { label: 'SWDKLLJ Pokok', value: 35000 },
+    { label: 'SWDKLLJ Denda', value: 0 },
+    { label: 'PNB STNK', value: 100000 },
+    { label: 'PNB TNKB', value: 60000 },
+    { label: 'OPSEN PKB Pokok', value: 59900 },
+    { label: 'OPSEN PKB Denda', value: 0 },
     ...(isDiscountVoucher ? [{ label: 'Diskon Voucher (5%)', value: -discountAmount, isBold: true }] : []),
-    ...(isOngkirVoucher ? [{ label: 'Potongan Ongkir', value: -originalPickupFee, isBold: true }] : []),
   ];
 
   return (
     <div className="bg-white border border-gray-100 rounded-[32px] md:rounded-[40px] p-8 shadow-sm sticky top-8 text-left transition-all font-inter">
       <div className="flex justify-between items-center mb-6">
         <h3 className="font-bold text-gray-800 text-base">Detail Order</h3>
-        <button className="btn-akang-primary text-white px-3 py-1.5 rounded-lg text-[10px] font-extrabold tracking-wide transition-colors">
-          Tambah Jasa
-        </button>
       </div>
       
       <div className="flex items-center gap-4 mb-8">
@@ -84,7 +104,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
           <p className="font-bold text-[13px] text-gray-800 leading-tight mb-1">
             {serviceTitle || 'Mutasi STNK'}
           </p>
-          <p className="text-[13px] font-bold text-gray-900">Rp2.651.000</p>
+          <p className="text-[13px] font-bold text-gray-900">Rp345.600</p>
         </div>
         <button 
           onClick={() => setIsPriceModalOpen(true)}
@@ -128,12 +148,12 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
           )}
         </div>
         {voucherError && (
-          <p className="text-[10px] text-red-500 font-medium ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-left-1">
+          <p className="text-[10px] text-red-500 font-medium ml-1 flex items-center gap-1">
             <XCircle size={12} /> Kode voucher tidak valid
           </p>
         )}
         {appliedVoucherType !== 'NONE' && (
-          <p className="text-[10px] text-green-600 font-medium ml-1 flex items-center gap-1 animate-in fade-in slide-in-from-left-1">
+          <p className="text-[10px] text-green-600 font-medium ml-1 flex items-center gap-1">
             <CheckCircle2 size={12} /> 
             {isOngkirVoucher ? 'Voucher Ongkir Berhasil!' : 'Voucher Diskon 5% Berhasil!'}
           </p>
@@ -143,7 +163,12 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
       <div className="space-y-4 pt-6 border-t border-gray-50">
         <div className="flex justify-between text-sm">
           <span className="text-gray-400 font-medium">Subtotal</span>
-          <span className="text-gray-800 font-bold">2.651.000</span>
+          <span className="text-gray-800 font-bold">{baseSubtotal.toLocaleString('id-ID')}</span>
+        </div>
+
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-400 font-medium">Biaya Admin</span>
+          <span className="text-gray-800 font-bold">{adminFee.toLocaleString('id-ID')}</span>
         </div>
         
         {isDiscountVoucher && (
@@ -154,12 +179,12 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
         )}
 
         <div className="flex justify-between text-sm">
-          <span className="text-gray-400 font-medium">Biaya Penjemputan</span>
+          <span className="text-gray-400 font-medium">Ongkir</span>
           <div className="flex gap-2">
-            <span className={`font-bold ${isOngkirVoucher ? 'text-gray-300 line-through' : 'text-gray-800'}`}>
-              {originalPickupFee.toLocaleString('id-ID')}
+            <span className={`font-bold ${(isOngkirVoucher || deliveryFee === 0) ? 'text-gray-300 line-through' : 'text-gray-800'}`}>
+              {deliveryFee.toLocaleString('id-ID')}
             </span>
-            {isOngkirVoucher && <span className="text-[#27AAE1] font-bold">Gratis</span>}
+            {(isOngkirVoucher || deliveryFee === 0) && <span className="text-[#27AAE1] font-bold">Gratis</span>}
           </div>
         </div>
 
@@ -170,6 +195,15 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
           </span>
         </div>
       </div>
+
+      {addressError && (
+        <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+          <AlertCircle className="text-red-500 shrink-0" size={18} />
+          <p className="text-[11px] font-bold text-red-600 leading-tight">
+            Alamat pengantaran belum diisi. Silakan lengkapi lokasi pengantaran dokumen terlebih dahulu.
+          </p>
+        </div>
+      )}
 
       <button 
         onClick={handlePayNow}
@@ -182,7 +216,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, onPayClick }: OrderSu
         isOpen={isPriceModalOpen}
         onClose={() => setIsPriceModalOpen(false)}
         items={priceBreakdown}
-        total={finalTotal}
+        total={baseSubtotal - discountAmount}
       />
     </div>
   );

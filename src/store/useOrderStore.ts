@@ -21,6 +21,7 @@ interface OrderData {
   ktp?: File | null;
   stnk?: File | null;
   bpkb?: File | null;
+  finalTotal?: number;
 }
 
 interface OrderState {
@@ -53,7 +54,8 @@ export const useOrderStore = create<OrderState>()(
       orderData: {
         jenisKendaraan: 'Mobil',
         jenisMutasi: 'Lengkap',
-        isDataMatch: 'Ya'
+        isDataMatch: 'Ya',
+        finalTotal: 0
       },
 
       setView: (view) => set({ view }),
@@ -88,7 +90,8 @@ export const useOrderStore = create<OrderState>()(
           orderData: { 
             jenisKendaraan: 'Mobil', 
             jenisMutasi: 'Lengkap', 
-            isDataMatch: 'Ya' 
+            isDataMatch: 'Ya',
+            finalTotal: 0
           } 
         }),
     }),

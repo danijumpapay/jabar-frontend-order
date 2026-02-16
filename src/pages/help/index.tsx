@@ -27,8 +27,7 @@ export const HelpPage = () => {
         </div>
 
         <div className="lg:col-span-7 space-y-4 md:space-y-6 order-2">
-          <div className="grid grid-cols-3 gap-2 md:gap-4">
-            <ContactCard href="tel:6281110139532" icon={Phone} label="Hubungi Akang Pajak" variant="sky" />
+          <div className="grid grid-cols-2 md:gap-4">
             <ContactCard href="https://wa.me/6281110139532" icon={MessageCircle} label="Whatsapp Akang Pajak" variant="green" />
             <ContactCard href="mailto:admin@akangpajak.com" icon={Mail} label="Email Akang Pajak" variant="blue" />
           </div>
@@ -47,32 +46,21 @@ export const HelpPage = () => {
                       <span>Senin – Jum'at</span>
                       <span className="font-semibold text-gray-700">08:00 – 20:00 WIB</span>
                     </li>
-                    <li className="flex justify-between border-b border-gray-100 pb-1">
-                      <span>Sabtu & Minggu</span>
-                      <span className="font-semibold text-gray-700">08:00 – 17:00 WIB</span>
-                    </li>
                   </ul>
                 </div>
                 <div className="space-y-3">
                   <p className="text-xs md:text-[13px] font-bold text-gray-800 uppercase tracking-wider flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                    Penjemputan Dokumen
+                    Pengantaran Dokumen
                   </p>
                   <ul className="text-xs md:text-sm text-gray-500 space-y-2 ml-4">
                     <li className="flex justify-between border-b border-gray-100 pb-1">
                       <span>Senin – Jum'at</span>
-                      <span className="font-semibold text-gray-700">08:00 – 12:00 WIB</span>
-                    </li>
-                    <li className="flex justify-between border-b border-gray-100 pb-1">
-                      <span>Minggu</span>
-                      <span className="font-semibold text-gray-700">09:00 – 14:00 WIB</span>
+                      <span className="font-semibold text-gray-700">08:00 – 20:00 WIB</span>
                     </li>
                   </ul>
                 </div>
               </div>
-              <p className="text-[11px] text-gray-400 italic leading-relaxed pt-2 border-t border-gray-100">
-                * Pengambilan dokumen untuk pemesanan di hari Minggu dilakukan pada hari Senin berikutnya.
-              </p>
             </CardContent>
           </Card>
         </div>

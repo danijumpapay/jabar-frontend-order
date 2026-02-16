@@ -4,12 +4,12 @@ export const faqs: FAQItem[] = [
   {
     id: "faq-1",
     question: "Di mana saja cakupan wilayah pengurusan surat kendaraan yang dilayani oleh Akang Pajak?",
-    answer: "Akang Pajak melayani pengurusan surat kendaraan dengan kode plat kendaraan B (Jadetabek)."
+    answer: "Akang Pajak melayani pengurusan surat kendaraan di wilayah Jawa Barat."
   },
   {
     id: "faq-2",
     question: "Layanan apa saja yang disediakan oleh Akang Pajak?",
-    answer: "Kami melayani perpanjangan STNK tahunan, lima tahunan, mutasi, balik nama, ganti plat, hingga pengurusan STNK hilang untuk kendaraan pribadi maupun perusahaan."
+    answer: "Kami melayani perpanjangan STNK tahunan, lima tahunan mutasi kendaraan pribadi maupun perusahaan."
   },
   {
     id: "faq-3",

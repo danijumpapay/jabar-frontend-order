@@ -21,9 +21,9 @@ export const OrderDetail = ({ data }: OrderDetailProps) => {
       </div>
 
       <div className="bg-gray-50 rounded-2xl p-6 md:p-8 space-y-4 border border-gray-100/50 text-left">
-        <p className="text-sm font-bold text-gray-800">Akang Pajak akan membantu pengurusan dokumenmu. Berikut dokumen yang akan kami ambil :</p>
+        <p className="text-sm font-bold text-gray-800">Akang Pajak akan membantu pengurusan dokumenmu</p>
         
-        <p className="text-xs text-gray-600">Untuk proses tahunan an. Pribadi, berikut dokumen yang akan kami ambil :</p>
+        {/* <p className="text-xs text-gray-600">Untuk proses tahunan an. Pribadi, berikut dokumen yang akan kami ambil :</p>
         <ul className="text-xs text-gray-600 space-y-2 list-disc ml-4">
           <li>Asli STNK lengkap bolak balik</li>
           <li>Asli eKTP</li>
@@ -38,20 +38,18 @@ export const OrderDetail = ({ data }: OrderDetailProps) => {
             <Building2 size={14} />
             LIHAT SYARAT DOKUMEN PT
           </button>
-        </div>
+        </div> */}
 
-        <div className="pt-2 border-t border-gray-200 mt-4">
           <div className="flex items-center gap-2 text-gray-800 mb-1">
             <Clock size={16} className="text-akang-pajak-blue" />
-            <p className="text-sm">Dokumen milikmu akan diambil pada: <span className="text-green-600 font-bold ml-1">24 Desember 2025 | 09.00 - 12.00</span></p>
+            <p className="text-sm">Dokumen milikmu akan diantarkan pada: <span className="text-green-600 font-bold ml-1">1 Februari 2026 | 08.00 - 20.00</span></p>
           </div>
           <div className="flex items-center gap-2 text-gray-800 mb-1">
-            <p className="text-xs text-gray-600">Ingin mengubah jadwal pengambilan dokumen? </p>
-            <a href="https://wa.me/628119509889" target="_blank" rel="noreferrer" className="text-xs text-akang-pajak-blue font-bold hover:underline">
+            <p className="text-xs text-gray-600">Ada kendala atau pertanyaan tentang dokumen? </p>
+            <a href="https://wa.me/6281110139532" target="_blank" rel="noreferrer" className="text-xs text-akang-pajak-blue font-bold hover:underline">
               Hubungi CS Akang Pajak di Whatsapp dengan klik di sini.
             </a>
           </div>
-        </div>
       </div>
 
       {isModalOpen && (

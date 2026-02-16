@@ -1,4 +1,4 @@
-import { X, Info } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface PriceItem {
   label: string;
@@ -34,15 +34,7 @@ export const PriceDetailModal = ({ isOpen, onClose, items, total }: PriceDetailM
             <X size={20} />
           </button>
         </div>
-
         <div className="p-6">
-          <div className="bg-blue-50/50 p-4 rounded-2xl flex gap-3 items-start mb-2">
-            <Info size={18} className="text-[#27AAE1] shrink-0 mt-0.5" />
-            <p className="text-xs text-gray-600 leading-relaxed font-inter">
-              Harga yang tertera sudah termasuk pajak dan biaya penanganan resmi dari Akang Pajak.
-            </p>
-          </div>
-
           <div className="space-y-3">
             {items.map((item, index) => (
               <div key={index} className="flex justify-between items-center font-inter">
@@ -69,7 +61,7 @@ export const PriceDetailModal = ({ isOpen, onClose, items, total }: PriceDetailM
             onClick={onClose}
             className="w-full bg-[#27AAE1] text-white py-4 rounded-2xl font-extrabold shadow-lg shadow-sky-100 hover:bg-sky-500 transition-all font-inter text-sm"
           >
-            Mengerti
+            Tutup
           </button>
         </div>
       </div>

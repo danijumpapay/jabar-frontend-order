@@ -4,7 +4,6 @@ import { OrderForm } from './pages/order';
 import { PaymentPage } from './pages/payment';
 import { WaitingPaymentPage } from './pages/payment/components/WaitingPaymentPage';
 import { PaymentSuccessPage } from './pages/payment/components/PaymentSuccessPage.tsx';
-import { DocumentUploadPage } from './pages/payment/components/DocumentUploadPage.tsx';
 import { PromoDetailPage } from './pages/promo/PromoDetailPage.tsx';
 import { TrackingPage } from './pages/tracking';
 import { RefundPage } from './pages/refund';
@@ -28,8 +27,7 @@ function App() {
       case 2: return <OrderForm />;
       case 3: return <PaymentPage />;
       case 4: return <WaitingPaymentPage />;
-      case 5: return <DocumentUploadPage />;
-      case 6: return <PaymentSuccessPage />;
+      case 5: return <PaymentSuccessPage />;
       default: return <HomePage />;
     }
   };
@@ -42,12 +40,40 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 md:px-10 lg:px-16 pb-32">
+      <main className="grow max-w-7xl mx-auto w-full px-4 md:px-10 lg:px-16">
         {renderContent()}
       </main>
+
+      <footer className="w-full py-10 pb-40 md:pb-12 border-t border-gray-50 bg-white font-inter">
+        <div className="max-w-7xl mx-auto px-4 md:px-10 lg:px-16 flex flex-col md:flex-row items-center justify-between gap-6">
+          
+          <div className="order-2 md:order-1">
+            <p className="text-[10px] md:text-xs text-gray-400 font-medium">
+              © {new Date().getFullYear()} Akang Pajak. All Rights Reserved.
+            </p>
+          </div>
+
+          <div className="order-1 md:order-2 flex items-center gap-3 bg-gray-50/50 px-4 py-2 rounded-2xl border border-gray-50">
+            <p className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap mt-4">
+              Mitra Resmi
+            </p>
+            <div className="h-4 w-px bg-gray-200 hidden md:block mt-4"></div>
+            <img 
+              src="/logo-bapenda-jabar.png" 
+              alt="Bapenda Jabar" 
+              className="h-8 md:h-8 w-auto grayscale-0 opacity-100 transition-all duration-500 object-contain mt-5" 
+            />
+            <img 
+              src="/payments/bjb.svg" 
+              alt="Bank BJB" 
+              className="h-8 md:h-8 w-auto grayscale-0 opacity-100 transition-all duration-500 object-contain"
+            />
+          </div>
+        </div>
+      </footer>
 
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around py-3 px-2 z-50">
         <button

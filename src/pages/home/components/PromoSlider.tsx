@@ -7,12 +7,6 @@ import 'swiper/css/pagination';
 
 const PROMO_BANNERS = [
   { 
-    id: 'AkangPajak-special', 
-    img: '/banners/promo-akang-pajak-ongkir.png', 
-    alt: 'Promo Akang Pajak',
-    target: 'promo-detail'
-  },
-  { 
     id: 'planet-ban', 
     img: '/banners/promo-planet-ban.png', 
     alt: 'Promo Planet Ban',
