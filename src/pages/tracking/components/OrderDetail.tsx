@@ -41,7 +41,7 @@ export const OrderDetail = ({ data }: OrderDetailProps) => {
         </div> */}
 
           <div className="flex items-center gap-2 text-gray-800 mb-1">
-            <Clock size={16} className="text-akang-pajak-blue" />
+            <Clock className="text-akang-pajak-blue w-[50px] h-[50px] md:w-5 md:h-5" />
             <p className="text-sm">Dokumen milikmu akan diantarkan pada: <span className="text-green-600 font-bold ml-1">1 Februari 2026 | 08.00 - 20.00</span></p>
           </div>
           <div className="flex items-center gap-2 text-gray-800 mb-1">
