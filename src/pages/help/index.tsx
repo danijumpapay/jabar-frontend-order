@@ -1,4 +1,4 @@
-import { Phone, MessageCircle, Mail } from 'lucide-react';
+import { MessageCircle, Mail } from 'lucide-react';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";

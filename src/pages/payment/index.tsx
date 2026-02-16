@@ -9,8 +9,6 @@ import { OrderSummary } from './components/OrderSummary';
 interface AddressData {
   alamatLengkap: string;
   kota: string;
-  namaPemberi: string;
-  noPonsel: string;
   keterangan: string;
 }
 
@@ -23,8 +21,6 @@ export const PaymentPage = () => {
   const [addressData, setAddressData] = useState<AddressData>({
     alamatLengkap: '',
     kota: '',
-    namaPemberi: '',
-    noPonsel: '',
     keterangan: ''
   });
 
