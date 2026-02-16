@@ -22,7 +22,7 @@ export const ServiceGrid = () => {
       
       <div className="grid grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
         {SERVICES.map((item) => {
-          const isActive = item.id === "1" || item.id === "2";
+          const isActive = item.id === "1" || item.id === "2" || item.id === "3";
           
           return (
             <div 

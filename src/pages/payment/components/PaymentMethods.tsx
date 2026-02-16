@@ -11,8 +11,8 @@ interface PaymentMethodsProps {
 
 export const PaymentMethods = ({ selectedMethod, onSelect }: PaymentMethodsProps) => {
   const paymentMethods: PaymentMethod[] = [
-    { id: 'QRIS', name: 'QRIS', logo: '/payments/qris.svg' },
     { id: 'BJB', name: 'VA BJB', logo: '/payments/bjb.svg' },
+    { id: 'QRIS', name: 'QRIS', logo: '/payments/qris.svg' },
     { id: 'CC', name: 'Credit Card', logo: '/payments/cc.png' },
   ];
 

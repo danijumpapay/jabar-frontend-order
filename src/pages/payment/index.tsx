@@ -15,7 +15,7 @@ interface AddressData {
 export const PaymentPage = () => {
   const { selectedService, setStep } = useOrderStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState('QRIS');
+  const [selectedMethod, setSelectedMethod] = useState('BJB');
   const [deliveryFee, setDeliveryFee] = useState(19900);
 
   const [addressData, setAddressData] = useState<AddressData>({

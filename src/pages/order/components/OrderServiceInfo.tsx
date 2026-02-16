@@ -16,7 +16,7 @@ export const OrderServiceInfo = ({ title, image, description }: OrderServiceInfo
       <div className="w-full">
         <div className="overflow-hidden shadow-sm bg-gray-100 aspect-video w-full rounded-2xl md:rounded-[40px]">
           <img 
-            src={image || '/services/mutasi.png'} 
+            src='/jabar-illustration.webp'
             alt={title} 
             className="w-full h-full object-cover"
           />
@@ -31,7 +31,7 @@ export const OrderServiceInfo = ({ title, image, description }: OrderServiceInfo
         <div className="bg-[#F8F9FA] p-6 md:p-8 rounded-3xl md:rounded-[40px] border border-gray-100">
           <div className={`text-gray-600 leading-relaxed text-sm transition-all duration-300 ${showFullDetail ? '' : 'line-clamp-3'}`}>
             {description || 
-            `Akang pajak merupakan Mitra resmi Bapenda Jabar dan Bank BJB untuk melayani pembayaran pajak kendaraan bermotor secara online di daerah Jawa Barat. Anda dapat melakukan pembayaran pajak kendaraan dengan mudah dan cepat tanpa harus datang ke kantor Samsat. Kami juga menyediakan berbagai layanan terkait pajak kendaraan seperti perpanjangan STNK, mutasi kendaraan, dan lain sebagainya. Dengan Akang Pajak, urusan pajak kendaraan Anda menjadi lebih praktis dan efisien.`}
+            `Akang pajak merupakan Mitra resmi Bapenda Jabar dan Bank BJB untuk melayani pembayaran pajak kendaraan bermotor secara online di daerah Jawa Barat. Anda dapat melakukan pembayaran pajak kendaraan dengan mudah dan cepat tanpa harus datang ke kantor Samsat`}
           </div>
           
           <Button 

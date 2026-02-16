@@ -8,11 +8,11 @@ interface PickupTypeCardProps {
 }
 
 export const PickupTypeCard = ({ address, onEditAddress, onFeeChange }: PickupTypeCardProps) => {
-  const [selectedId, setSelectedId] = useState('reguler');
+  const [selectedId, setSelectedId] = useState('express');
 
   const deliveryOptions = [
-    { id: 'express', title: 'Express', price: 29900, eta: '1 - 2 hari', bonus: 'Voucher belanja Planet Ban max 20K', extra: 'Luar jangkauan +19K dan 2 Hari kerja', icon: <MotorbikeIcon size={22} /> },
-    { id: 'reguler', title: 'Reguler', price: 19900, eta: '3 - 5 hari', bonus: 'Voucher belanja Planet Ban max 20K', extra: 'Luar jangkauan +19K dan 2 Hari kerja', icon: <Truck size={22} /> },
+    { id: 'express', title: 'Express', price: 29900, eta: '1 - 2 hari', bonus: 'Voucher belanja Planet Ban max 20K', extra: 'Luar jangkauan +20K dan 2 Hari kerja', icon: <MotorbikeIcon size={22} /> },
+    { id: 'reguler', title: 'Reguler', price: 19900, eta: '3 - 5 hari', bonus: 'Voucher belanja Planet Ban max 20K', extra: 'Luar jangkauan +20K dan 2 Hari kerja', icon: <Truck size={22} /> },
     { id: 'samsat', title: 'Ambil di Samsat', price: 0, eta: 'Gratis', icon: <Building2 size={22} /> }
   ];
 
