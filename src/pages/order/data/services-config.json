@@ -9,19 +9,6 @@
   "services": [
     { "id": "1", "slug": "stnk-tahunan", "extraFields": [] },
     { "id": "2", "slug": "stnk-5-tahun", "extraFields": [] },
-    { "id": "3", "slug": "balik-nama", "extraFields": [
-      { 
-        "id": "domisili_sama", 
-        "label": "Domisili Wilayah", 
-        "info": "Apakah proses balik nama dalam satu wilayah yang sama?",
-        "type": "select", 
-        "options": ["Ya", "Tidak"],
-        "required": true 
-      }
-    ]},
-    { "id": "4", "slug": "mutasi", "extraFields": [
-      { "id": "kota_tujuan", "label": "Kota Tujuan", "info": "Kota tujuan pindah berkas STNK Contoh : Bandung", "type": "text", "required": true }
-    ]},
-    { "id": "5", "slug": "blokir-plat", "extraFields": [] }
+    { "id": "3", "slug": "blokir-plat", "extraFields": [] }
   ]
 }
