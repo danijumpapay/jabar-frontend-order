@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { X, History, MapPin, Trash2, Info } from 'lucide-react';
-
-interface AddressData {
-  alamatLengkap: string;
-  kota: string;
-  keterangan: string;
-}
+import { AddressData } from '@/types/payment';
 
 interface AddressModalProps {
   isOpen: boolean;
@@ -34,7 +29,7 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
     keterangan: initialData.keterangan || ''
   });
   const [errors, setErrors] = useState<Partial<Record<keyof AddressData, string>>>({});
-  
+
   const [history, setHistory] = useState<AddressData[]>(() => {
     const savedHistory = localStorage.getItem('address_history');
     return savedHistory ? JSON.parse(savedHistory) : [];
@@ -43,7 +38,11 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
   const handleChange = (field: keyof AddressData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
   };
 
@@ -57,7 +56,6 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
   const validate = () => {
     const newErrors: Partial<Record<keyof AddressData, string>> = {};
     if (!formData.alamatLengkap.trim()) newErrors.alamatLengkap = "Alamat lengkap wajib diisi";
-    if (!formData.kota.trim()) newErrors.kota = "Kota wajib diisi";
     if (!formData.keterangan.trim()) newErrors.keterangan = "Keterangan tambahan wajib diisi";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -97,7 +95,7 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
             <X size={20} />
           </button>
         </div>
-        
+
         <div className="p-6 space-y-6 text-left overflow-y-auto scrollbar-hide">
           {history.length > 0 && (
             <div className="space-y-3">
@@ -129,12 +127,6 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
               <TooltipLabel label="Alamat Lengkap" info="Contoh: Perumahan Mahkota Mas Blok O4 RT 002/RW 009 Kec Cidadap" />
               <textarea rows={3} value={formData.alamatLengkap} onChange={(e) => handleChange('alamatLengkap', e.target.value)} className={`w-full bg-gray-50 border ${errors.alamatLengkap ? 'border-red-500' : 'border-gray-100'} rounded-xl p-3.5 text-sm focus:outline-none focus:border-[#27AAE1] transition-all resize-none mt-2 font-inter`} />
               {errors.alamatLengkap && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1">{errors.alamatLengkap}</p>}
-            </div>
-
-            <div className="space-y-1">
-              <TooltipLabel label="Kota" info="Contoh: Bandung" />
-              <input type="text" value={formData.kota} onChange={(e) => handleChange('kota', e.target.value)} className={`w-full bg-gray-50 border ${errors.kota ? 'border-red-500' : 'border-gray-100'} rounded-xl p-3.5 text-sm focus:outline-none focus:border-[#27AAE1] transition-all mt-2 font-inter`} />
-              {errors.kota && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1">{errors.kota}</p>}
             </div>
 
             <div className="space-y-1">

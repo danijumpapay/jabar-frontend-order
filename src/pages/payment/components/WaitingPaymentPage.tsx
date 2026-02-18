@@ -2,13 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { Clock, Copy, ChevronDown, ChevronUp, Landmark, Smartphone, Check, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { useOrderStore } from '@/store/useOrderStore';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
+import { formatCurrency } from '@/lib/utils';
 
 export const WaitingPaymentPage = () => {
   const { setStep, orderData, resetOrder } = useOrderStore();
   const [openAccordion, setOpenAccordion] = useState<string | null>('atm');
   const [copied, setCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number>(24 * 60 * 60);
-  
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -47,10 +48,10 @@ export const WaitingPaymentPage = () => {
   return (
     <div className="md:py-8 space-y-8 font-inter animate-in fade-in duration-500">
       <div className="text-left">
-        <Breadcrumbs 
-          parentPage="Pembayaran" 
-          onParentClick={() => setStep(3)} 
-          currentPage="Menunggu Pembayaran" 
+        <Breadcrumbs
+          parentPage="Pembayaran"
+          onParentClick={() => setStep(3)}
+          currentPage="Menunggu Pembayaran"
         />
       </div>
 
@@ -87,13 +88,12 @@ export const WaitingPaymentPage = () => {
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
                     </div>
                   )}
-                  <button 
+                  <button
                     onClick={() => handleCopy('8837300012345678')}
-                    className={`p-3 rounded-xl transition-all shadow-sm border ${
-                      copied 
-                        ? 'bg-green-500 border-green-500 text-white' 
+                    className={`p-3 rounded-xl transition-all shadow-sm border ${copied
+                        ? 'bg-green-500 border-green-500 text-white'
                         : 'bg-white border-gray-200 text-[#27AAE1] hover:bg-[#27AAE1] hover:text-white'
-                    }`}
+                      }`}
                   >
                     {copied ? <Check size={20} /> : <Copy size={20} />}
                   </button>
@@ -104,7 +104,7 @@ export const WaitingPaymentPage = () => {
             <div className="flex justify-between items-center p-2">
               <span className="text-sm text-gray-500 font-medium">Total Tagihan</span>
               <span className="text-xl font-black text-gray-900">
-                Rp{(orderData?.finalTotal || 0).toLocaleString('id-ID')}
+                {formatCurrency(orderData?.finalTotal || 0)}
               </span>
             </div>
           </div>
@@ -112,7 +112,7 @@ export const WaitingPaymentPage = () => {
           <div className="space-y-4">
             <h4 className="font-bold text-gray-800 text-sm mb-4">Instruksi Pembayaran</h4>
             <div className="border border-gray-100 rounded-2xl overflow-hidden">
-              <button 
+              <button
                 onClick={() => setOpenAccordion(openAccordion === 'atm' ? null : 'atm')}
                 className="w-full p-4 flex justify-between items-center hover:bg-gray-50 transition-colors"
               >
@@ -137,7 +137,7 @@ export const WaitingPaymentPage = () => {
             </div>
 
             <div className="border border-gray-100 rounded-2xl overflow-hidden">
-              <button 
+              <button
                 onClick={() => setOpenAccordion(openAccordion === 'mBJB' ? null : 'mBJB')}
                 className="w-full p-4 flex justify-between items-center hover:bg-gray-50 transition-colors"
               >
@@ -164,15 +164,15 @@ export const WaitingPaymentPage = () => {
         </div>
 
         <div className="p-8 bg-gray-50/50 space-y-4">
-          <button 
+          <button
             onClick={() => setStep(5)}
             disabled={timeLeft <= 0}
             className="btn-akang-primary w-full text-white py-4 rounded-2xl font-extrabold text-sm shadow-lg shadow-sky-100 transition-all disabled:bg-gray-300"
           >
             Saya Sudah Bayar
           </button>
-          <button 
-            onClick={() => setShowConfirmModal(true)} 
+          <button
+            onClick={() => setShowConfirmModal(true)}
             className="w-full bg-white text-gray-500 py-4 rounded-2xl font-bold text-sm hover:text-red-500 transition-all"
           >
             Batalkan Pesanan
@@ -191,13 +191,13 @@ export const WaitingPaymentPage = () => {
               <p className="text-sm text-gray-500 font-medium">Apakah Anda yakin ingin membatalkan pesanan ini? Data yang sudah diisi akan hilang.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <button 
+              <button
                 onClick={() => setShowConfirmModal(false)}
                 className="py-4 rounded-2xl font-bold text-sm text-gray-500 bg-gray-50 hover:bg-gray-100 transition-colors"
               >
                 Kembali
               </button>
-              <button 
+              <button
                 onClick={confirmCancel}
                 className="py-4 rounded-2xl font-extrabold text-sm text-white bg-red-500 hover:bg-red-600 shadow-lg shadow-red-100 transition-colors"
               >
@@ -218,7 +218,7 @@ export const WaitingPaymentPage = () => {
               <h3 className="text-xl font-black text-gray-900">Berhasil Dibatalkan</h3>
               <p className="text-sm text-gray-500 font-medium">Pesanan Anda telah berhasil dibatalkan secara permanen.</p>
             </div>
-            <button 
+            <button
               onClick={handleFinalExit}
               className="w-full py-4 rounded-2xl font-extrabold text-sm text-white bg-[#27AAE1] shadow-lg shadow-sky-100 transition-colors"
             >

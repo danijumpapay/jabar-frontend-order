@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PriceDetailModal } from './PriceDetailModal';
 import { CheckCircle2, Ticket, XCircle, AlertCircle } from 'lucide-react';
 import { useOrderStore } from '@/store/useOrderStore';
+import { formatCurrency } from '@/lib/utils';
 
 interface OrderSummaryProps {
   serviceImage?: string;
@@ -21,14 +22,12 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
 
   const baseSubtotal = 345600;
   const adminFee = 10000;
-  
+
   const isOngkirVoucher = appliedVoucherType === 'ONGKIR';
   const isDiscountVoucher = appliedVoucherType === 'DISCOUNT';
-  
-  const currentPickupFee = (isOngkirVoucher || deliveryFee === 0) ? 0 : deliveryFee;
   const discountAmount = isDiscountVoucher ? Math.round(baseSubtotal * 0.05) : 0;
-  
-  const finalTotal = baseSubtotal + adminFee + currentPickupFee - discountAmount;
+
+  const finalTotal = baseSubtotal - discountAmount;
 
   const handleApplyVoucher = () => {
     const code = voucherCode.trim().toLowerCase();
@@ -51,9 +50,9 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
   };
 
   const handlePayNow = () => {
-    const isAddressMissing = !address || 
-                             address.trim() === '' || 
-                             address.toLowerCase().includes('belum ada alamat');
+    const isAddressMissing = !address ||
+      address.trim() === '' ||
+      address.toLowerCase().includes('belum ada alamat');
 
     if (deliveryFee > 0 && isAddressMissing) {
       setAddressError(true);
@@ -63,9 +62,9 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
 
     setAddressError(false);
     setOrderId("12345");
-    setOrderData({ 
-      ...orderData, 
-      finalTotal: finalTotal 
+    setOrderData({
+      ...orderData,
+      finalTotal: finalTotal
     });
 
     if (onPayClick) {
@@ -93,20 +92,20 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
       <div className="flex justify-between items-center mb-6">
         <h3 className="font-bold text-gray-800 text-base">Detail Order</h3>
       </div>
-      
+
       <div className="flex items-center gap-4 mb-8">
-        <img 
-          src={serviceImage || '/services/mutasi.png'} 
-          className="w-16 h-16 rounded-2xl object-cover border border-gray-50" 
-          alt="Service" 
+        <img
+          src={serviceImage || '/services/mutasi.png'}
+          className="w-16 h-16 rounded-2xl object-cover border border-gray-50"
+          alt="Service"
         />
         <div className="flex-1">
           <p className="font-bold text-[13px] text-gray-800 leading-tight mb-1">
             {serviceTitle || 'Mutasi STNK'}
           </p>
-          <p className="text-[13px] font-bold text-gray-900">Rp345.600</p>
+          <p className="text-[13px] font-bold text-gray-900">{formatCurrency(345600)}</p>
         </div>
-        <button 
+        <button
           onClick={() => setIsPriceModalOpen(true)}
           className="text-[10px] font-bold text-[#27AAE1] border border-sky-100 bg-sky-50/50 px-2 py-1 rounded-md hover:bg-sky-100 transition-colors"
         >
@@ -119,7 +118,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         <div className="relative flex gap-2">
           <div className="relative flex-1">
             <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-            <input 
+            <input
               type="text"
               value={voucherCode}
               onChange={(e) => {
@@ -132,14 +131,14 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
             />
           </div>
           {appliedVoucherType === 'NONE' ? (
-            <button 
+            <button
               onClick={handleApplyVoucher}
               className="btn-akang-primary text-white px-3 py-1.5 rounded-lg text-[10px] font-extrabold tracking-wide transition-colors"
             >
               Apply
             </button>
           ) : (
-            <button 
+            <button
               onClick={handleRemoveVoucher}
               className="bg-red-50 text-red-500 px-4 rounded-2xl text-xs font-bold hover:bg-red-100 transition-all"
             >
@@ -154,7 +153,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         )}
         {appliedVoucherType !== 'NONE' && (
           <p className="text-[10px] text-green-600 font-medium ml-1 flex items-center gap-1">
-            <CheckCircle2 size={12} /> 
+            <CheckCircle2 size={12} />
             {isOngkirVoucher ? 'Voucher Ongkir Berhasil!' : 'Voucher Diskon 5% Berhasil!'}
           </p>
         )}
@@ -163,18 +162,18 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
       <div className="space-y-4 pt-6 border-t border-gray-50">
         <div className="flex justify-between text-sm">
           <span className="text-gray-400 font-medium">Subtotal</span>
-          <span className="text-gray-800 font-bold">{baseSubtotal.toLocaleString('id-ID')}</span>
+          <span className="text-gray-800 font-bold">{formatCurrency(baseSubtotal)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
           <span className="text-gray-400 font-medium">Biaya Admin</span>
-          <span className="text-gray-800 font-bold">{adminFee.toLocaleString('id-ID')}</span>
+          <span className="text-gray-800 font-bold">{formatCurrency(adminFee)}</span>
         </div>
-        
+
         {isDiscountVoucher && (
           <div className="flex justify-between text-sm animate-in fade-in slide-in-from-top-1">
             <span className="text-gray-400 font-medium">Diskon Voucher</span>
-            <span className="text-green-600 font-bold">-{discountAmount.toLocaleString('id-ID')}</span>
+            <span className="text-green-600 font-bold">-{formatCurrency(discountAmount)}</span>
           </div>
         )}
 
@@ -182,7 +181,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
           <span className="text-gray-400 font-medium">Ongkir</span>
           <div className="flex gap-2">
             <span className={`font-bold ${(isOngkirVoucher || deliveryFee === 0) ? 'text-gray-300 line-through' : 'text-gray-800'}`}>
-              {deliveryFee.toLocaleString('id-ID')}
+              {formatCurrency(deliveryFee)}
             </span>
             {(isOngkirVoucher || deliveryFee === 0) && <span className="text-[#27AAE1] font-bold">Gratis</span>}
           </div>
@@ -191,7 +190,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         <div className="pt-6 border-t border-dashed border-gray-200 flex justify-between items-center">
           <span className="font-bold text-gray-800 text-lg">Total</span>
           <span className="text-2xl font-black text-gray-900 underline decoration-gray-100 underline-offset-8">
-            {finalTotal.toLocaleString('id-ID')}
+            {formatCurrency(finalTotal)}
           </span>
         </div>
       </div>
@@ -205,18 +204,18 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         </div>
       )}
 
-      <button 
+      <button
         onClick={handlePayNow}
         className="btn-akang-primary w-full text-white py-4 rounded-2xl font-extrabold text-base mt-8 shadow-lg shadow-sky-100 transition-all active:scale-[0.98]"
       >
         Bayar Sekarang
       </button>
 
-      <PriceDetailModal 
+      <PriceDetailModal
         isOpen={isPriceModalOpen}
         onClose={() => setIsPriceModalOpen(false)}
         items={priceBreakdown}
-        total={baseSubtotal - discountAmount}
+        total={finalTotal}
       />
     </div>
   );

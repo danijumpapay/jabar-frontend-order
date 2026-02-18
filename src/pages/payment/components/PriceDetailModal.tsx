@@ -1,10 +1,7 @@
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
-
-interface PriceItem {
-  label: string;
-  value: number;
-  isBold?: boolean;
-}
+import { formatCurrency } from '@/lib/utils';
+import { PriceItem } from '@/types/payment';
 
 interface PriceDetailModalProps {
   isOpen: boolean;
@@ -16,17 +13,9 @@ interface PriceDetailModalProps {
 export const PriceDetailModal = ({ isOpen, onClose, items, total }: PriceDetailModalProps) => {
   if (!isOpen) return null;
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
-
-  return (
-    <div className="fixed inset-0 z-110 flex items-center justify-center px-4">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 font-inter">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div className="bg-white w-full max-w-md rounded-[32px] overflow-hidden relative shadow-2xl animate-in fade-in zoom-in duration-200">
         <div className="p-5 border-b border-gray-50 flex items-center justify-between">
           <h3 className="font-bold text-gray-800 text-lg font-inter">Rincian Pembayaran</h3>
@@ -57,7 +46,7 @@ export const PriceDetailModal = ({ isOpen, onClose, items, total }: PriceDetailM
         </div>
 
         <div className="p-6">
-          <button 
+          <button
             onClick={onClose}
             className="w-full bg-[#27AAE1] text-white py-4 rounded-2xl font-extrabold shadow-lg shadow-sky-100 hover:bg-sky-500 transition-all font-inter text-sm"
           >
@@ -65,6 +54,7 @@ export const PriceDetailModal = ({ isOpen, onClose, items, total }: PriceDetailM
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
