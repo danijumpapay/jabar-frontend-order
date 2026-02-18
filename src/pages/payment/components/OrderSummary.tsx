@@ -27,9 +27,14 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
 
   const isOngkirVoucher = appliedVoucherType === 'ONGKIR';
   const isDiscountVoucher = appliedVoucherType === 'DISCOUNT';
+  const currentPickupFee = (isOngkirVoucher || deliveryFee === 0) ? 0 : deliveryFee;
   const discountAmount = isDiscountVoucher ? Math.round(baseSubtotal * 0.05) : 0;
 
-  const finalTotal = baseSubtotal - discountAmount;
+  // Correct calculation for external total (includes all fees)
+  const finalTotal = baseSubtotal + adminFee + currentPickupFee - discountAmount;
+
+  // Calculate total for modal (excluding admin and ongkir as they are not separate items in the list)
+  const modalTotal = baseSubtotal - discountAmount;
 
   const handleApplyVoucher = () => {
     const code = voucherCode.trim().toLowerCase();
@@ -235,7 +240,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         isOpen={isPriceModalOpen}
         onClose={() => setIsPriceModalOpen(false)}
         items={priceBreakdown}
-        total={finalTotal}
+        total={modalTotal}
       />
     </div>
   );
