@@ -70,66 +70,26 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
   };
 
   const handleGetCurrentLocation = () => {
-    setIsLocating(true);
-
-    const useIPFallback = async () => {
-      // Attempt 1: ipapi.co
-      try {
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-        if (data && data.latitude && data.longitude) {
-          setCoords({ lat: data.latitude, lng: data.longitude });
-          await reverseGeocode(data.latitude, data.longitude);
-          toast.success("Lokasi didapatkan via IP (Akurasi Rendah)");
-          return true;
-        }
-      } catch (err) {
-        console.warn("ipapi.co failed, trying next...");
-      }
-
-      // Attempt 2: ip-api.com
-      try {
-        const response = await fetch('http://ip-api.com/json/');
-        const data = await response.json();
-        if (data && data.lat && data.lon) {
-          setCoords({ lat: data.lat, lng: data.lon });
-          await reverseGeocode(data.lat, data.lon);
-          toast.success("Lokasi didapatkan via IP (Akurasi Rendah)");
-          return true;
-        }
-      } catch (err) {
-        console.error("All IP Fallbacks failed:", err);
-      }
-      return false;
-    };
-
     if (!navigator.geolocation) {
-      toast.info("Browser tidak mendukung geoloc, mencoba IP...");
-      useIPFallback().finally(() => setIsLocating(false));
+      toast.error("Geolokasi tidak didukung oleh browser Anda");
       return;
     }
 
+    setIsLocating(true);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
         setCoords({ lat: latitude, lng: longitude });
         await reverseGeocode(latitude, longitude);
-        toast.success("Lokasi presisi ditemukan!");
+        toast.success("Lokasi berhasil didapatkan");
         setIsLocating(false);
       },
-      async (error) => {
-        console.warn("Native Geolocation failed:", error);
-
-        if (error.code === 1) { // Permission Denied
-          toast.warning("Izin diblokir browser. Mencoba IP fallback...");
-        } else if (error.code === 3) { // Timeout
-          toast.warning("Waktu habis. Mencoba IP fallback...");
-        }
-
-        const success = await useIPFallback();
-        if (!success) {
-          toast.error("Gagal mendapatkan lokasi. Silakan geser pin di peta secara manual.");
-        }
+      (error) => {
+        console.error("Geolocation error:", error);
+        let message = "Gagal mendapatkan lokasi.";
+        if (error.code === 1) message = "Izin lokasi ditolak. Silakan aktifkan izin lokasi di browser Anda.";
+        else if (error.code === 3) message = "Waktu habis saat mencoba mendapatkan lokasi.";
+        toast.error(message);
         setIsLocating(false);
       },
       {
