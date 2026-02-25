@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { OpenStreetMapProvider, GeoSearchControl } from 'leaflet-geosearch';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { LocateFixed, Loader2 } from 'lucide-react';
 
 const DefaultIcon = L.icon({
     iconUrl: icon,
@@ -20,6 +21,8 @@ interface MapSelectorProps {
     lat: number;
     lng: number;
     onChange: (lat: number, lng: number) => void;
+    onLocate?: () => void;
+    isLocating?: boolean;
 }
 
 const SearchControl = ({ onChange }: { onChange: (lat: number, lng: number) => void }) => {
@@ -106,9 +109,9 @@ const LocationMarker = ({ lat, lng, onChange }: MapSelectorProps) => {
     );
 };
 
-export const MapSelector = ({ lat, lng, onChange }: MapSelectorProps) => {
+export const MapSelector = ({ lat, lng, onChange, onLocate, isLocating }: MapSelectorProps) => {
     return (
-        <div className="h-[300px] w-full rounded-2xl overflow-hidden border border-gray-100 mb-4 shadow-inner relative">
+        <div className="h-[300px] w-full rounded-2xl overflow-hidden border border-gray-100 mb-4 shadow-inner relative group">
             <MapContainer
                 center={[lat, lng]}
                 zoom={15}
@@ -125,7 +128,31 @@ export const MapSelector = ({ lat, lng, onChange }: MapSelectorProps) => {
                 <LocationMarker lat={lat} lng={lng} onChange={onChange} />
                 <SearchControl onChange={onChange} />
             </MapContainer>
-            <div className="absolute bottom-4 right-4 z-[1000] flex flex-col gap-2">
+
+            {/* Floating Location Controls */}
+            <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
+                {onLocate && (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onLocate();
+                        }}
+                        disabled={isLocating}
+                        className="bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-lg border border-gray-100 text-[#27AAE1] hover:bg-[#27AAE1] hover:text-white transition-all active:scale-95 disabled:opacity-50 group/locate"
+                        title="Tampilkan Lokasi Saya"
+                    >
+                        {isLocating ? (
+                            <Loader2 size={20} className="animate-spin" />
+                        ) : (
+                            <LocateFixed size={20} />
+                        )}
+                    </button>
+                )}
+            </div>
+
+            <div className="absolute bottom-4 right-4 z-[1000] flex flex-col gap-2 pointer-events-none">
                 <p className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-[10px] font-bold text-gray-500 shadow-sm border border-gray-100">
                     Klik atau geser pin untuk ubah lokasi
                 </p>

@@ -45,15 +45,30 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
     lng: 107.6191
   });
 
-  const reverseGeocode = async (lat: number, lng: number) => {
+  const reverseGeocode = async (lat: number, lng: number, isRetry = false): Promise<boolean> => {
+    if (!lat || !lng) return false;
+
+    // Tampilkan status di input hanya pada percobaan pertama
+    if (!isRetry) setFormData(prev => ({ ...prev, alamatLengkap: 'Mencari alamat...' }));
+
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
-      );
+      // Menggunakan format json (bukan jsonv2) terkadang lebih stabil
+      // Menghilangkan zoom agar server lebih fleksibel mencari data terdekat
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=id&addressdetails=1&_cb=${Date.now()}`;
+
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
       const data = await response.json();
 
-      if (data && data.address) {
-        const city = data.address.city || data.address.town || data.address.state || '';
+      if (data && (data.display_name || data.address)) {
+        const addr = data.address;
+        const city = addr.city || addr.town || addr.village || addr.suburb || addr.city_district || addr.state || '';
         const fullAddress = data.display_name;
 
         setFormData(prev => ({
@@ -62,10 +77,23 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
           kota: city
         }));
         setErrors({});
+        return true;
       }
+
+      throw new Error('No address found in response');
+
     } catch (error) {
-      console.error("Error fetching address:", error);
-      toast.error("Gagal mendapatkan alamat dari lokasi.");
+      console.error(`Reverse geocode error (isRetry: ${isRetry}):`, error);
+
+      // Jika gagal percobaan pertama, tunggu 1 detik lalu coba lagi (Retry)
+      if (!isRetry) {
+        console.log("Mencoba ulang deteksi alamat dalam 1 detik...");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return reverseGeocode(lat, lng, true);
+      }
+
+      setFormData(prev => ({ ...prev, alamatLengkap: '' }));
+      return false;
     }
   };
 
@@ -77,51 +105,52 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
 
     setIsLocating(true);
 
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    };
-
     const successCallback = async (position: GeolocationPosition) => {
+      console.log("Geolocation success:", position.coords);
       const { latitude, longitude } = position.coords;
+
       setCoords({ lat: latitude, lng: longitude });
-      await reverseGeocode(latitude, longitude);
-      toast.success("Lokasi berhasil didapatkan");
+
+      const success = await reverseGeocode(latitude, longitude);
+
+      if (success) {
+        toast.success("Lokasi dan alamat berhasil didapatkan");
+      } else {
+        toast.warning("Lokasi didapat, namun gagal mendeteksi alamat. Silakan isi manual.");
+      }
+
       setIsLocating(false);
     };
 
     const errorCallback = (error: GeolocationPositionError) => {
-      console.error("Geolocation error:", error);
+      console.error("Geolocation error (Attempt 1):", error);
 
-      // If high accuracy failed, try again with low accuracy
-      if (options.enableHighAccuracy) {
-        console.log("Retrying with low accuracy...");
-        navigator.geolocation.getCurrentPosition(
-          successCallback,
-          (secondError) => {
-            console.error("Geolocation second error:", secondError);
-            let message = "Gagal mendapatkan lokasi.";
-            if (secondError.code === 1) message = "Izin lokasi ditolak. Silakan aktifkan izin lokasi di browser Anda.";
-            else if (secondError.code === 2) message = "Lokasi tidak tersedia. Pastikan GPS/Layanan lokasi aktif.";
-            else if (secondError.code === 3) message = "Waktu habis saat mencoba mendapatkan lokasi.";
-            toast.error(message);
-            setIsLocating(false);
-          },
-          { ...options, enableHighAccuracy: false }
-        );
-        return;
-      }
+      console.log("Retrying with low accuracy...");
+      navigator.geolocation.getCurrentPosition(
+        successCallback,
+        (secondError) => {
+          console.error("Geolocation error (Attempt 2):", secondError);
+          let message = "Gagal mendapatkan lokasi.";
+          if (secondError.code === 1) message = "Izin lokasi ditolak. Aktifkan izin lokasi di browser.";
+          else if (secondError.code === 2) message = "Lokasi tidak tersedia. Pastikan Wi-Fi/GPS aktif.";
+          else if (secondError.code === 3) message = "Waktu habis saat mencari lokasi.";
 
-      let message = "Gagal mendapatkan lokasi.";
-      if (error.code === 1) message = "Izin lokasi ditolak. Silakan aktifkan izin lokasi di browser Anda.";
-      else if (error.code === 2) message = "Lokasi tidak tersedia. Pastikan GPS/Layanan lokasi aktif.";
-      else if (error.code === 3) message = "Waktu habis saat mencoba mendapatkan lokasi.";
-      toast.error(message);
-      setIsLocating(false);
+          toast.error(message);
+          setIsLocating(false);
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 10000,
+          maximumAge: 30000
+        }
+      );
     };
 
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options);
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
+      enableHighAccuracy: true,
+      timeout: 6000,
+      maximumAge: 0
+    });
   };
 
   const handleMapChange = async (lat: number, lng: number) => {
@@ -201,12 +230,12 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
                   <div key={idx} className="relative group/item">
                     <button type="button" onClick={() => selectFromHistory(item)} className="w-full flex items-start gap-3 p-3 pr-10 rounded-2xl border border-gray-100 hover:border-[#27AAE1] hover:bg-sky-50 transition-all text-left">
                       <MapPin size={16} className="text-gray-300 group-hover/item:text-[#27AAE1] mt-0.5 shrink-0" />
-                      <div className="overflow-hidden">
-                        <p className="text-xs font-bold text-gray-700 truncate">{item.alamatLengkap}</p>
-                        <p className="text-[10px] text-gray-400 font-medium font-inter">{item.kota}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-gray-700 leading-normal break-words">{item.alamatLengkap}</p>
+                        <p className="text-[10px] text-gray-400 font-medium font-inter mt-0.5">{item.kota}</p>
                       </div>
                     </button>
-                    <button onClick={(e) => deleteHistory(e, idx)} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover/item:opacity-100">
+                    <button onClick={(e) => deleteHistory(e, idx)} className="absolute right-3 top-3 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover/item:opacity-100">
                       <Trash2 size={14} />
                     </button>
                   </div>
@@ -231,7 +260,13 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
             </button>
 
             <div className="relative group/map">
-              <MapSelector lat={coords.lat} lng={coords.lng} onChange={handleMapChange} />
+              <MapSelector
+                lat={coords.lat}
+                lng={coords.lng}
+                onChange={handleMapChange}
+                onLocate={handleGetCurrentLocation}
+                isLocating={isLocating}
+              />
             </div>
 
             <div className="space-y-1">
