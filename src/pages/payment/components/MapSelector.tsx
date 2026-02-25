@@ -38,20 +38,40 @@ const SearchControl = ({ onChange }: { onChange: (lat: number, lng: number) => v
             retainZoomLevel: false,
             animateZoom: true,
             keepResult: true,
-            searchLabel: 'Cari lokasi...',
+            searchLabel: 'Cari jalan, wilayah, atau koordinat...',
         });
 
         map.addControl(searchControl);
 
         const handleSearch = (result: any) => {
-            onChange(result.location.y, result.location.x);
+            if (result.location) {
+                onChange(result.location.y, result.location.x);
+            }
+        };
+
+        // Handle raw input for coordinates fallback
+        const handleRawSearch = (e: any) => {
+            const query = e.query;
+            const coordRegex = /^(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)$/;
+            const match = query.match(coordRegex);
+
+            if (match) {
+                const lat = parseFloat(match[1]);
+                const lng = parseFloat(match[2]);
+                onChange(lat, lng);
+                map.setView([lat, lng], 17);
+            }
         };
 
         map.on('geosearch/showlocation', handleSearch);
+        // @ts-ignore
+        map.on('geosearch/search', handleRawSearch);
 
         return () => {
             map.removeControl(searchControl);
             map.off('geosearch/showlocation', handleSearch);
+            // @ts-ignore
+            map.off('geosearch/search', handleRawSearch);
         };
     }, [map, onChange]);
 
