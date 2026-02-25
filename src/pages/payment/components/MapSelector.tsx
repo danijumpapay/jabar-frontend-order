@@ -1,7 +1,9 @@
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-geosearch/dist/geosearch.css';
 import { useEffect } from 'react';
+import { OpenStreetMapProvider, GeoSearchControl } from 'leaflet-geosearch';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -19,6 +21,42 @@ interface MapSelectorProps {
     lng: number;
     onChange: (lat: number, lng: number) => void;
 }
+
+const SearchControl = ({ onChange }: { onChange: (lat: number, lng: number) => void }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        const provider = new OpenStreetMapProvider();
+
+        // @ts-ignore
+        const searchControl = new GeoSearchControl({
+            provider: provider,
+            style: 'bar',
+            showMarker: false,
+            showPopup: false,
+            autoClose: true,
+            retainZoomLevel: false,
+            animateZoom: true,
+            keepResult: true,
+            searchLabel: 'Cari lokasi...',
+        });
+
+        map.addControl(searchControl);
+
+        const handleSearch = (result: any) => {
+            onChange(result.location.y, result.location.x);
+        };
+
+        map.on('geosearch/showlocation', handleSearch);
+
+        return () => {
+            map.removeControl(searchControl);
+            map.off('geosearch/showlocation', handleSearch);
+        };
+    }, [map, onChange]);
+
+    return null;
+};
 
 const LocationMarker = ({ lat, lng, onChange }: MapSelectorProps) => {
     const map = useMap();
@@ -50,7 +88,7 @@ const LocationMarker = ({ lat, lng, onChange }: MapSelectorProps) => {
 
 export const MapSelector = ({ lat, lng, onChange }: MapSelectorProps) => {
     return (
-        <div className="h-[250px] w-full rounded-2xl overflow-hidden border border-gray-100 mb-4 shadow-inner">
+        <div className="h-[300px] w-full rounded-2xl overflow-hidden border border-gray-100 mb-4 shadow-inner relative">
             <MapContainer
                 center={[lat, lng]}
                 zoom={15}
@@ -65,6 +103,7 @@ export const MapSelector = ({ lat, lng, onChange }: MapSelectorProps) => {
                     attribution="&copy; Google Maps"
                 />
                 <LocationMarker lat={lat} lng={lng} onChange={onChange} />
+                <SearchControl onChange={onChange} />
             </MapContainer>
             <div className="absolute bottom-4 right-4 z-[1000] flex flex-col gap-2">
                 <p className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-[10px] font-bold text-gray-500 shadow-sm border border-gray-100">
