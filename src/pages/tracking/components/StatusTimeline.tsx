@@ -13,7 +13,7 @@ export const StatusTimeline = ({ steps }: StatusTimelineProps) => (
         <div key={idx} className="relative flex items-center gap-4">
           <div className="z-10 bg-white">
             {step.completed ? (
-              <CheckCircle2 className="text-akang-pajak-blue bg-white rounded-full" size={24} />
+              <CheckCircle2 className="text-kang-pajak-blue bg-white rounded-full" size={24} />
             ) : (
               <Circle className="text-gray-200 fill-white" size={24} />
             )}

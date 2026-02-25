@@ -75,7 +75,7 @@ export const PaymentSuccessPage = () => {
 
           <button
             onClick={handleGoToTracking}
-            className="btn-akang-primary w-full text-white py-4 rounded-2xl font-extrabold text-sm shadow-lg shadow-sky-100 transition-all flex items-center justify-center gap-2 group"
+            className="btn-kang-primary w-full text-white py-4 rounded-2xl font-extrabold text-sm shadow-lg shadow-sky-100 transition-all flex items-center justify-center gap-2 group"
           >
             Cek Status Pesanan
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

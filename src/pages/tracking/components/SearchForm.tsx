@@ -19,9 +19,8 @@ export const SearchForm = ({ orderNumber, setOrderNumber, handleSearch, error, h
             list="order-history"
             value={orderNumber}
             onChange={(e) => setOrderNumber(e.target.value)}
-            className={`h-12 rounded-xl bg-gray-50 border-gray-200 focus-visible:ring-akang-pajak-blue ${
-              error ? 'border-red-500' : ''
-            }`}
+            className={`h-12 rounded-xl bg-gray-50 border-gray-200 focus-visible:ring-kang-pajak-blue ${error ? 'border-red-500' : ''
+              }`}
             placeholder="Masukkan nomor order (contoh: 12345)"
           />
           <datalist id="order-history">
@@ -30,9 +29,9 @@ export const SearchForm = ({ orderNumber, setOrderNumber, handleSearch, error, h
             ))}
           </datalist>
         </div>
-        <Button 
-          type="submit" 
-          className="btn-akang-primary h-12 px-10 text-white rounded-2xl font-bold shadow-lg shadow-akang-pajak-blue/20 transition-all active:scale-95"
+        <Button
+          type="submit"
+          className="btn-kang-primary h-12 px-10 text-white rounded-2xl font-bold shadow-lg shadow-kang-pajak-blue/20 transition-all active:scale-95"
         >
           Cari Order
         </Button>

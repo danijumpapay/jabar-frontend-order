@@ -19,7 +19,7 @@ export const TutorialPage = () => {
       
       <div className="space-y-2 text-left">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Tutorial Order</h1>
-        <p className="text-sm text-gray-500">Ikuti panduan langkah demi langkah untuk melakukan order layanan di Akang Pajak dengan benar.</p>
+        <p className="text-sm text-gray-500">Ikuti panduan langkah demi langkah untuk melakukan order layanan di Kang Pajak dengan benar.</p>
       </div>
 
       <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as TutorialTab)} className="w-full">

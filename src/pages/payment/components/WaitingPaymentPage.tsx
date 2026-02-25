@@ -91,8 +91,8 @@ export const WaitingPaymentPage = () => {
                   <button
                     onClick={() => handleCopy('8837300012345678')}
                     className={`p-3 rounded-xl transition-all shadow-sm border ${copied
-                        ? 'bg-green-500 border-green-500 text-white'
-                        : 'bg-white border-gray-200 text-[#27AAE1] hover:bg-[#27AAE1] hover:text-white'
+                      ? 'bg-green-500 border-green-500 text-white'
+                      : 'bg-white border-gray-200 text-[#27AAE1] hover:bg-[#27AAE1] hover:text-white'
                       }`}
                   >
                     {copied ? <Check size={20} /> : <Copy size={20} />}
@@ -167,7 +167,7 @@ export const WaitingPaymentPage = () => {
           <button
             onClick={() => setStep(5)}
             disabled={timeLeft <= 0}
-            className="btn-akang-primary w-full text-white py-4 rounded-2xl font-extrabold text-sm shadow-lg shadow-sky-100 transition-all disabled:bg-gray-300"
+            className="btn-kang-primary w-full text-white py-4 rounded-2xl font-extrabold text-sm shadow-lg shadow-sky-100 transition-all disabled:bg-gray-300"
           >
             Saya Sudah Bayar
           </button>

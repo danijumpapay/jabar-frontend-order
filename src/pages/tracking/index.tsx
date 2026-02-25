@@ -9,12 +9,12 @@ import { StatusTimeline } from './components/StatusTimeline';
 
 export const TrackingPage = () => {
   const { setView, orderId, setOrderId, setStep } = useOrderStore();
-  
+
   const [orderNumber, setOrderNumber] = useState(() => orderId || '');
-  const [status, setStatus] = useState<'idle' | 'found' | 'not-found'>(() => 
+  const [status, setStatus] = useState<'idle' | 'found' | 'not-found'>(() =>
     (orderId === '12345' || orderId === '11111' || orderId === '00000' || orderId === '99999') ? 'found' : 'idle'
   );
-  
+
   const [error, setError] = useState(false);
   const [history, setHistory] = useState<string[]>(() => {
     try {
@@ -36,7 +36,7 @@ export const TrackingPage = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const targetNumber = orderNumber.trim();
-    
+
     if (!targetNumber) {
       setError(true);
       return;
@@ -49,13 +49,13 @@ export const TrackingPage = () => {
     }
 
     const validIds = ['12345', '11111', '00000'];
-    
+
     if (!history.includes(targetNumber) && validIds.includes(targetNumber)) {
       const newHist = [targetNumber, ...history].slice(0, 5);
       setHistory(newHist);
       localStorage.setItem('order_history', JSON.stringify(newHist));
     }
-    
+
     setError(false);
     setStatus(validIds.includes(targetNumber) ? 'found' : 'not-found');
   };
@@ -111,7 +111,7 @@ export const TrackingPage = () => {
       <div className="text-left">
         <Breadcrumbs currentPage="Cek Order" />
       </div>
-      
+
       <div className="space-y-2 text-left">
         <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Cek Order</h1>
         <p className="text-sm text-gray-500">Pantau progress orderan kamu dengan mencari nomor order di sini</p>
@@ -119,12 +119,12 @@ export const TrackingPage = () => {
 
       <Card className="rounded-[32px] border-gray-100 shadow-sm overflow-hidden bg-white">
         <CardContent className="p-6 md:p-8">
-          <SearchForm 
-            orderNumber={orderNumber} 
-            setOrderNumber={setOrderNumber} 
-            handleSearch={handleSearch} 
-            error={error} 
-            history={history} 
+          <SearchForm
+            orderNumber={orderNumber}
+            setOrderNumber={setOrderNumber}
+            handleSearch={handleSearch}
+            error={error}
+            history={history}
           />
         </CardContent>
       </Card>
@@ -134,26 +134,25 @@ export const TrackingPage = () => {
           <CardContent className="p-6 md:p-10 space-y-10 text-left">
             <div className="flex items-center justify-between border-b border-gray-50 pb-6">
               <h3 className="font-bold text-gray-800 text-lg">Order Detail</h3>
-              <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider ${
-                isCompleted ? 'bg-green-50 text-green-600' : 
-                isRefundStatus ? 'bg-orange-50 text-orange-600' : 
-                'bg-blue-50 text-[#27AAE1]'
-              }`}>
+              <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider ${isCompleted ? 'bg-green-50 text-green-600' :
+                  isRefundStatus ? 'bg-orange-50 text-orange-600' :
+                    'bg-blue-50 text-[#27AAE1]'
+                }`}>
                 {isCompleted ? 'Selesai' : isRefundStatus ? 'Refund Diproses' : 'In Progress'}
               </span>
             </div>
-            
+
             <OrderDetail data={currentOrderData} />
-            
+
             <div className="py-4">
               <StatusTimeline steps={steps} />
             </div>
-            
+
             {canRefund && (
-              <Button 
-                onClick={() => setView('refund')} 
-                variant="outline" 
-                className="w-full h-14 rounded-full border-2 border-akang-pajak-blue text-akang-pajak-blue font-bold transition-all hover:bg-akang-pajak-blue hover:text-white hover:shadow-md"
+              <Button
+                onClick={() => setView('refund')}
+                variant="outline"
+                className="w-full h-14 rounded-full border-2 border-kang-pajak-blue text-kang-pajak-blue font-bold transition-all hover:bg-kang-pajak-blue hover:text-white hover:shadow-md"
               >
                 Ajukan Pembatalan / Refund
               </Button>

@@ -54,7 +54,7 @@ function App() {
 
           <div className="order-2 md:order-1">
             <p className="text-[10px] md:text-xs text-gray-400 font-medium">
-              © {new Date().getFullYear()} Akang Pajak. All Rights Reserved.
+              © {new Date().getFullYear()} Kang Pajak. All Rights Reserved.
             </p>
           </div>
 

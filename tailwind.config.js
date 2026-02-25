@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        AkangPajak: {
+        KangPajak: {
           blue: '#2267E1',
           dark: '#1f89b6',
         },

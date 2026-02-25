@@ -180,7 +180,7 @@ export const OrderForm = () => {
 
               <Button
                 type="submit"
-                className="btn-akang-primary w-full text-white py-7 rounded-xl font-extrabold text-base transition-all shadow-sm"
+                className="btn-kang-primary w-full text-white py-7 rounded-xl font-extrabold text-base transition-all shadow-sm"
                 disabled={isLoading}
               >
                 {isLoading ? 'Mengecek Data...' : 'Order Sekarang'}

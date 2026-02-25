@@ -9,18 +9,18 @@ export const HelpPage = () => {
   return (
     <div className="max-w-7xl mx-auto md:py-8 space-y-8 font-inter animate-in fade-in">
       <Breadcrumbs currentPage="Bantuan" />
-      
+
       <div className="space-y-2 text-left">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Bantuan</h1>
-        <p className="text-sm text-gray-500">Ada kendala atau pertanyaan? Tim Akang Pajak siap membantu kamu.</p>
+        <p className="text-sm text-gray-500">Ada kendala atau pertanyaan? Tim Kang Pajak siap membantu kamu.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
         <div className="lg:col-span-5 order-1">
           <div className="rounded-[32px] md:rounded-[40px] overflow-hidden bg-sky-100 aspect-4/5 lg:h-120 shadow-sm">
-            <img 
-              src="/support/customer-service.png" 
-              alt="Akang Pajak Support" 
+            <img
+              src="/support/customer-service.png"
+              alt="Kang Pajak Support"
               className="w-full h-full object-cover"
             />
           </div>
@@ -28,13 +28,13 @@ export const HelpPage = () => {
 
         <div className="lg:col-span-7 space-y-4 md:space-y-6 order-2">
           <div className="grid grid-cols-2 md:gap-4">
-            <ContactCard href="https://wa.me/6281110139532" icon={MessageCircle} label="Whatsapp Akang Pajak" variant="green" />
-            <ContactCard href="mailto:admin@akangpajak.com" icon={Mail} label="Email Akang Pajak" variant="blue" />
+            <ContactCard href="https://wa.me/6281110139532" icon={MessageCircle} label="Whatsapp Kang Pajak" variant="green" />
+            <ContactCard href="mailto:admin@kangpajak.com" icon={Mail} label="Email Kang Pajak" variant="blue" />
           </div>
 
           <Card className="rounded-[32px] border-gray-100 bg-gray-50/50 shadow-sm">
             <CardContent className="p-6 md:p-8 space-y-6">
-              <h3 className="text-base md:text-lg font-bold text-gray-800">Jam Operasional Akang Pajak</h3>
+              <h3 className="text-base md:text-lg font-bold text-gray-800">Jam Operasional Kang Pajak</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div className="space-y-3">
                   <p className="text-xs md:text-[13px] font-bold text-gray-800 uppercase tracking-wider flex items-center gap-2">
@@ -67,12 +67,12 @@ export const HelpPage = () => {
       </div>
 
       <div className="space-y-6 pt-6 md:pt-8">
-        <h2 className="text-lg md:text-xl font-bold text-gray-900 leading-tight">Pertanyaan Seputar Layanan Akang Pajak</h2>
+        <h2 className="text-lg md:text-xl font-bold text-gray-900 leading-tight">Pertanyaan Seputar Layanan Kang Pajak</h2>
         <Accordion type="single" collapsible className="space-y-3">
           {faqs.map((faq) => (
-            <AccordionItem 
-              key={faq.id} 
-              value={faq.id} 
+            <AccordionItem
+              key={faq.id}
+              value={faq.id}
               className="border border-gray-100 bg-gray-50/50 rounded-2xl px-2 overflow-hidden transition-all hover:border-[#27AAE1]/30"
             >
               <AccordionTrigger className="px-4 md:px-6 py-4 md:py-5 hover:no-underline group">

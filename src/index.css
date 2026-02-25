@@ -6,9 +6,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-akang-pajak-blue: #02AEF7;
-  --color-akang-pajak-blue-2: #2267E1;
-  --color-akang-pajak-dark: #1E293B;
+  --color-kang-pajak-blue: #02AEF7;
+  --color-kang-pajak-blue-2: #2267E1;
+  --color-kang-pajak-dark: #1E293B;
   --spacing-container: 1300px;
 }
 
@@ -155,6 +155,6 @@
   border-radius: 4px !important;
 }
 
-.btn-akang-primary {
-  @apply bg-akang-pajak-blue hover:bg-akang-pajak-blue-2;
+.btn-kang-primary {
+  @apply bg-kang-pajak-blue hover:bg-kang-pajak-blue-2;
 }

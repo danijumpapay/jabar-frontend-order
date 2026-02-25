@@ -158,7 +158,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
           {appliedVoucherType === 'NONE' ? (
             <button
               onClick={handleApplyVoucher}
-              className="btn-akang-primary text-white px-3 py-1.5 rounded-lg text-[10px] font-extrabold tracking-wide transition-colors"
+              className="btn-kang-primary text-white px-3 py-1.5 rounded-lg text-[10px] font-extrabold tracking-wide transition-colors"
             >
               Apply
             </button>
@@ -240,7 +240,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
 
       <button
         onClick={handlePayNow}
-        className="btn-akang-primary w-full text-white py-4 rounded-2xl font-extrabold text-base mt-8 shadow-lg shadow-sky-100 transition-all active:scale-[0.98]"
+        className="btn-kang-primary w-full text-white py-4 rounded-2xl font-extrabold text-base mt-8 shadow-lg shadow-sky-100 transition-all active:scale-[0.98]"
       >
         Bayar Sekarang
       </button>

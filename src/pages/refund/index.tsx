@@ -94,10 +94,10 @@ export const RefundPage = () => {
   return (
     <div className="max-w-7xl mx-auto md:py-8 space-y-8 font-inter animate-in fade-in">
       <div className="flex items-center gap-4">
-        <Breadcrumbs 
-          parentPage="Cek Order" 
-          onParentClick={() => setView('tracking')} 
-          currentPage="Pengajuan Refund" 
+        <Breadcrumbs
+          parentPage="Cek Order"
+          onParentClick={() => setView('tracking')}
+          currentPage="Pengajuan Refund"
         />
       </div>
 
@@ -112,13 +112,13 @@ export const RefundPage = () => {
         <div className="lg:col-span-2">
           <Card className="rounded-[32px] border-gray-100 shadow-sm overflow-hidden">
             <CardContent className="p-6 md:p-10">
-              <RefundForm 
-                formData={formData} 
+              <RefundForm
+                formData={formData}
                 errors={errors}
                 isLoading={isLoading}
                 onNominalChange={handleNominalChange}
                 onInputChange={handleInputChange}
-                onSubmit={handleSubmit} 
+                onSubmit={handleSubmit}
               />
             </CardContent>
           </Card>
@@ -126,7 +126,7 @@ export const RefundPage = () => {
 
         <aside className="space-y-6 text-left">
           <Card className="rounded-3xl border-none bg-blue-50/50 p-6">
-            <h4 className="font-bold text-akang-pajak-blue mb-3 flex items-center gap-2">
+            <h4 className="font-bold text-kang-pajak-blue mb-3 flex items-center gap-2">
               <Info size={18} /> Informasi Refund
             </h4>
             <ul className="text-xs text-gray-600 space-y-3 list-disc ml-4 font-medium leading-relaxed">

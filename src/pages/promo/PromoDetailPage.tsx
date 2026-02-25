@@ -19,7 +19,7 @@ interface PromoContent {
 
 const PROMO_DATA: Record<string, PromoContent> = {
   "planet-ban": {
-    title: "Syarat & Ketentuan Promo Planet Ban x Akang Pajak",
+    title: "Syarat & Ketentuan Promo Planet Ban x Kang Pajak",
     bannerImg: "/banners/promo-planet-ban.png",
     badge: "Voucher Rp20.000",
     expiry: "Masa Aktif: 90 Hari setelah order",
@@ -29,7 +29,7 @@ const PROMO_DATA: Record<string, PromoContent> = {
         icon: <Tag size={18} />,
         items: [
           "Pelanggan berhak mendapatkan Voucher Belanja Planet Ban dengan nilai maksimal Rp20.000.",
-          "Voucher hanya akan diberikan setelah pelanggan berhasil menyelesaikan order/transaksi melalui platform atau layanan Akang Pajak.",
+          "Voucher hanya akan diberikan setelah pelanggan berhasil menyelesaikan order/transaksi melalui platform atau layanan Kang Pajak.",
         ]
       },
       {
@@ -44,9 +44,9 @@ const PROMO_DATA: Record<string, PromoContent> = {
       }
     ]
   },
-  "Akang Pajak-special": {
-    title: "Syarat & Ketentuan Promo Spesial Pengguna Baru Akang Pajak",
-    bannerImg: "/banners/promo-akang-pajak-ongkir.png",
+  "Kang Pajak-special": {
+    title: "Syarat & Ketentuan Promo Spesial Pengguna Baru Kang Pajak",
+    bannerImg: "/banners/promo-kang-pajak-ongkir.png",
     badge: "Potongan Rp20.000",
     expiry: "Hingga 31 Des 2026",
     sections: [
@@ -54,7 +54,7 @@ const PROMO_DATA: Record<string, PromoContent> = {
         title: "Mekanisme Program",
         icon: <Tag size={18} />,
         items: [
-          "Promo khusus untuk transaksi pertama di platform Akang Pajak.",
+          "Promo khusus untuk transaksi pertama di platform Kang Pajak.",
           "Potongan harga otomatis didapatkan saat memilih layanan STNK atau Pajak.",
           "Berlaku untuk semua jenis kendaraan roda dua dan roda empat."
         ]
@@ -66,7 +66,7 @@ const PROMO_DATA: Record<string, PromoContent> = {
           "Minimum transaksi untuk mendapatkan potongan adalah Rp200.000.",
           "Promo hanya dapat digunakan 1 kali per nomor WhatsApp/Email.",
           "Tidak dapat digabungkan dengan promo voucher lainnya.",
-          "Keputusan Akang Pajak mengenai keabsahan transaksi bersifat mutlak."
+          "Keputusan Kang Pajak mengenai keabsahan transaksi bersifat mutlak."
         ]
       }
     ]
@@ -75,7 +75,7 @@ const PROMO_DATA: Record<string, PromoContent> = {
 
 export const PromoDetailPage = () => {
   const { setView, selectedPromoId } = useOrderStore();
-  
+
   const content = useMemo((): PromoContent => {
     const id = selectedPromoId || 'planet-ban';
     return PROMO_DATA[id] || PROMO_DATA['planet-ban'];
@@ -88,9 +88,9 @@ export const PromoDetailPage = () => {
       </div>
 
       <div className="relative rounded-[32px] md:rounded-[40px] overflow-hidden shadow-lg mx-4 md:mx-0">
-        <img 
-          src={content.bannerImg} 
-          alt={content.title} 
+        <img
+          src={content.bannerImg}
+          alt={content.title}
           className="object-cover w-full h-full"
         />
       </div>
@@ -139,11 +139,11 @@ export const PromoDetailPage = () => {
         </div>
 
         <div className="pt-4 pb-12">
-          <button 
+          <button
             onClick={() => { setView('order'); window.scrollTo(0, 0); }}
             className="w-full h-14 bg-white border-2 border-[#27AAE1] text-[#27AAE1] hover:bg-[#27AAE1] hover:text-white rounded-full font-bold transition-all shadow-sm flex items-center justify-center gap-2 active:scale-95"
           >
-          Tutup
+            Tutup
           </button>
         </div>
       </div>

@@ -25,8 +25,8 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-10 lg:px-16 py-3 flex items-center justify-between">
         <div className="flex items-center gap-8 flex-1">
           <img
-            src="/logo-akangpajak.svg"
-            alt="Akang Pajak Logo"
+            src="/logo-kangpajak.svg"
+            alt="Kang Pajak Logo"
             className="h-7 md:h-8 w-auto cursor-pointer transition-opacity hover:opacity-80"
             onClick={handleGoHome}
           />
@@ -54,7 +54,7 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center gap-3">
             <Button
               onClick={() => navigateTo("tracking")}
-              className="btn-akang-primary text-white px-6 rounded-full font-bold shadow-lg shadow-[#27AAE1]/20 transition-all active:scale-95"
+              className="btn-kang-primary text-white px-6 rounded-full font-bold shadow-lg shadow-[#27AAE1]/20 transition-all active:scale-95"
             >
               Cek Order
             </Button>
@@ -70,14 +70,13 @@ export const Navbar = () => {
       </div>
 
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-b border-gray-100 ${
-          isOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-b border-gray-100 ${isOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="px-4 py-6 flex flex-col gap-3">
           <Button
             onClick={() => navigateTo("tracking")}
-            className="btn-akang-primary w-full h-12 text-white rounded-xl font-bold transition-all active:scale-[0.98]"
+            className="btn-kang-primary w-full h-12 text-white rounded-xl font-bold transition-all active:scale-[0.98]"
           >
             Cek Order
           </Button>
