@@ -76,28 +76,52 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
     }
 
     setIsLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        setCoords({ lat: latitude, lng: longitude });
-        await reverseGeocode(latitude, longitude);
-        toast.success("Lokasi berhasil didapatkan");
-        setIsLocating(false);
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
-        let message = "Gagal mendapatkan lokasi.";
-        if (error.code === 1) message = "Izin lokasi ditolak. Silakan aktifkan izin lokasi di browser Anda.";
-        else if (error.code === 3) message = "Waktu habis saat mencoba mendapatkan lokasi.";
-        toast.error(message);
-        setIsLocating(false);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    };
+
+    const successCallback = async (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords;
+      setCoords({ lat: latitude, lng: longitude });
+      await reverseGeocode(latitude, longitude);
+      toast.success("Lokasi berhasil didapatkan");
+      setIsLocating(false);
+    };
+
+    const errorCallback = (error: GeolocationPositionError) => {
+      console.error("Geolocation error:", error);
+
+      // If high accuracy failed, try again with low accuracy
+      if (options.enableHighAccuracy) {
+        console.log("Retrying with low accuracy...");
+        navigator.geolocation.getCurrentPosition(
+          successCallback,
+          (secondError) => {
+            console.error("Geolocation second error:", secondError);
+            let message = "Gagal mendapatkan lokasi.";
+            if (secondError.code === 1) message = "Izin lokasi ditolak. Silakan aktifkan izin lokasi di browser Anda.";
+            else if (secondError.code === 2) message = "Lokasi tidak tersedia. Pastikan GPS/Layanan lokasi aktif.";
+            else if (secondError.code === 3) message = "Waktu habis saat mencoba mendapatkan lokasi.";
+            toast.error(message);
+            setIsLocating(false);
+          },
+          { ...options, enableHighAccuracy: false }
+        );
+        return;
       }
-    );
+
+      let message = "Gagal mendapatkan lokasi.";
+      if (error.code === 1) message = "Izin lokasi ditolak. Silakan aktifkan izin lokasi di browser Anda.";
+      else if (error.code === 2) message = "Lokasi tidak tersedia. Pastikan GPS/Layanan lokasi aktif.";
+      else if (error.code === 3) message = "Waktu habis saat mencoba mendapatkan lokasi.";
+      toast.error(message);
+      setIsLocating(false);
+    };
+
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options);
   };
 
   const handleMapChange = async (lat: number, lng: number) => {
