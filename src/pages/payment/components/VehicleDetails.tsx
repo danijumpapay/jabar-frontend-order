@@ -62,7 +62,9 @@ export const VehicleDetails = ({ vehicle }: VehicleDetailsProps) => {
 
                 <div className="space-y-1">
                     <p className="text-xs text-gray-500">Nomor Rangka</p>
-                    <p className="font-bold text-gray-800 tracking-wide">{vehicle.chassisNumber}</p>
+                    <p className="font-bold text-gray-800 tracking-wide">
+                        {vehicle.chassisNumber.slice(0, -5)}xxxxx
+                    </p>
                 </div>
 
                 <div className="md:col-span-2 pt-2">

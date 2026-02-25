@@ -11,7 +11,7 @@
       "label": "Email",
       "info": "Digunakan untuk mengirim invoice pembayaran",
       "type": "email",
-      "required": false
+      "required": true
     },
     {
       "id": "whatsapp",
@@ -36,8 +36,8 @@
     },
     {
       "id": "no_rangka",
-      "label": "4 digit terakhir nomor rangka kendaraan",
-      "info": "dapat ditemukan di STNK",
+      "label": "Nomor Rangka Kendaraan",
+      "info": "Masukkan nomor rangka lengkap sesuai STNK",
       "type": "text",
       "required": true
     }

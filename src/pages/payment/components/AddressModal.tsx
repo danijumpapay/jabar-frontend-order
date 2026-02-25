@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { X, History, MapPin, Trash2, Info } from 'lucide-react';
+import { X, History, MapPin, Trash2, Info, LocateFixed, Loader2 } from 'lucide-react';
 import { AddressData } from '@/types/payment';
+import { toast } from 'sonner';
+import { MapSelector } from './MapSelector';
 
 interface AddressModalProps {
   isOpen: boolean;
@@ -36,6 +38,112 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
     const savedHistory = localStorage.getItem('address_history');
     return savedHistory ? JSON.parse(savedHistory) : [];
   });
+
+  const [isLocating, setIsLocating] = useState(false);
+  const [coords, setCoords] = useState<{ lat: number; lng: number }>({
+    lat: -6.9175,
+    lng: 107.6191
+  });
+
+  const reverseGeocode = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+      );
+      const data = await response.json();
+
+      if (data && data.address) {
+        const city = data.address.city || data.address.town || data.address.state || '';
+        const fullAddress = data.display_name;
+
+        setFormData(prev => ({
+          ...prev,
+          alamatLengkap: fullAddress,
+          kota: city
+        }));
+        setErrors({});
+      }
+    } catch (error) {
+      console.error("Error fetching address:", error);
+      toast.error("Gagal mendapatkan alamat dari lokasi.");
+    }
+  };
+
+  const handleGetCurrentLocation = () => {
+    setIsLocating(true);
+
+    const useIPFallback = async () => {
+      // Attempt 1: ipapi.co
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        if (data && data.latitude && data.longitude) {
+          setCoords({ lat: data.latitude, lng: data.longitude });
+          await reverseGeocode(data.latitude, data.longitude);
+          toast.success("Lokasi didapatkan via IP (Akurasi Rendah)");
+          return true;
+        }
+      } catch (err) {
+        console.warn("ipapi.co failed, trying next...");
+      }
+
+      // Attempt 2: ip-api.com
+      try {
+        const response = await fetch('http://ip-api.com/json/');
+        const data = await response.json();
+        if (data && data.lat && data.lon) {
+          setCoords({ lat: data.lat, lng: data.lon });
+          await reverseGeocode(data.lat, data.lon);
+          toast.success("Lokasi didapatkan via IP (Akurasi Rendah)");
+          return true;
+        }
+      } catch (err) {
+        console.error("All IP Fallbacks failed:", err);
+      }
+      return false;
+    };
+
+    if (!navigator.geolocation) {
+      toast.info("Browser tidak mendukung geoloc, mencoba IP...");
+      useIPFallback().finally(() => setIsLocating(false));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        setCoords({ lat: latitude, lng: longitude });
+        await reverseGeocode(latitude, longitude);
+        toast.success("Lokasi presisi ditemukan!");
+        setIsLocating(false);
+      },
+      async (error) => {
+        console.warn("Native Geolocation failed:", error);
+
+        if (error.code === 1) { // Permission Denied
+          toast.warning("Izin diblokir browser. Mencoba IP fallback...");
+        } else if (error.code === 3) { // Timeout
+          toast.warning("Waktu habis. Mencoba IP fallback...");
+        }
+
+        const success = await useIPFallback();
+        if (!success) {
+          toast.error("Gagal mendapatkan lokasi. Silakan geser pin di peta secara manual.");
+        }
+        setIsLocating(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
+
+  const handleMapChange = async (lat: number, lng: number) => {
+    setCoords({ lat, lng });
+    await reverseGeocode(lat, lng);
+  };
 
   const handleChange = (field: keyof AddressData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -124,6 +232,24 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
           )}
 
           <div className="space-y-4 pt-2 border-t border-dashed border-gray-100">
+            <button
+              type="button"
+              onClick={handleGetCurrentLocation}
+              disabled={isLocating}
+              className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl border-2 border-dashed border-gray-100 text-gray-500 hover:border-[#27AAE1] hover:text-[#27AAE1] hover:bg-sky-50 transition-all font-bold text-sm"
+            >
+              {isLocating ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <LocateFixed size={18} />
+              )}
+              {isLocating ? 'Mencari Lokasi...' : 'Pin Lokasi Saat Ini'}
+            </button>
+
+            <div className="relative group/map">
+              <MapSelector lat={coords.lat} lng={coords.lng} onChange={handleMapChange} />
+            </div>
+
             <div className="space-y-1">
               <TooltipLabel label="Alamat Lengkap" required info="Contoh: Perumahan Mahkota Mas Blok O4 RT 002/RW 009 Kec Cidadap" />
               <textarea rows={3} value={formData.alamatLengkap} onChange={(e) => handleChange('alamatLengkap', e.target.value)} className={`w-full bg-gray-50 border ${errors.alamatLengkap ? 'border-red-500' : 'border-gray-100'} rounded-xl p-3.5 text-sm focus:outline-none focus:border-[#27AAE1] transition-all resize-none mt-2 font-inter`} />

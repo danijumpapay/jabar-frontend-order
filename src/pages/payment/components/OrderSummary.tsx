@@ -129,7 +129,6 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
           <p className="font-bold text-[13px] text-gray-800 leading-tight mb-1">
             {serviceTitle || 'Mutasi STNK'}
           </p>
-          <p className="text-[13px] font-bold text-gray-900">{formatCurrency(345600)}</p>
         </div>
         <button
           onClick={() => setIsPriceModalOpen(true)}

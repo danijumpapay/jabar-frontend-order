@@ -4,7 +4,7 @@ import { getDeliveryPricing, JABODETABEK_CITIES } from './pricing-config';
 describe('pricing-config', () => {
     describe('getDeliveryPricing', () => {
         it('should return jabodetabek pricing for Jabodetabek cities', () => {
-            const city = JABODETABEK_CITIES[0]; // Kota Bekasi
+            const city = JABODETABEK_CITIES[0];
             const pricing = getDeliveryPricing(city, 'MOTOR');
             expect(pricing.express).toBe(34900);
             expect(pricing.reguler).toBe(24900);

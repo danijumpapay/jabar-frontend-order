@@ -49,10 +49,6 @@ export const OrderForm = () => {
 
       if (response.success && response.data) {
         const apiNik = response.data.NO_KTP;
-        const apiChassisLast4 = response.data.NO_RANGKA.slice(-4);
-
-        const inputChassisLast4 = data.no_rangka.slice(-4);
-
         if (apiNik !== data.nik) {
           Swal.fire({
             icon: 'error',
@@ -65,11 +61,11 @@ export const OrderForm = () => {
           return;
         }
 
-        if (apiChassisLast4 !== inputChassisLast4) {
+        if (response.data.NO_RANGKA !== data.no_rangka.toUpperCase()) {
           Swal.fire({
             icon: 'error',
             title: 'Data Tidak Sesuai',
-            text: '4 digit terakhir nomor rangka tidak cocok.',
+            text: 'Nomor rangka tidak cocok dengan data kendaraan.',
             confirmButtonColor: '#27AAE1',
             confirmButtonText: 'Cek Lagi'
           });
@@ -164,12 +160,12 @@ export const OrderForm = () => {
                       <Input
                         {...register(fieldId)}
                         onChange={(e) => {
-                          if (fieldId === 'plateNumber') {
+                          if (fieldId === 'plateNumber' || fieldId === 'no_rangka') {
                             e.target.value = e.target.value.toUpperCase();
                           }
                           register(fieldId).onChange(e);
                         }}
-                        className={`${inputStyles} ${fieldId === 'plateNumber' ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
+                        className={`${inputStyles} ${(fieldId === 'plateNumber' || fieldId === 'no_rangka') ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
                       />
                     )}
 

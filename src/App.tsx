@@ -63,16 +63,16 @@ function App() {
               Mitra Resmi
             </p>
             <div className="h-4 w-px bg-gray-200 hidden md:block mt-4"></div>
-            {/* <img
+            <img
               src="/logo-bapenda-jabar.png"
               alt="Bapenda Jabar"
               className="h-8 md:h-8 w-auto grayscale-0 opacity-100 transition-all duration-500 object-contain mt-5"
-            /> */}
-            <img
+            />
+            {/* <img
               src="/payments/bjb.svg"
               alt="Bank BJB"
               className="h-8 md:h-8 w-auto grayscale-0 opacity-100 transition-all duration-500 object-contain"
-            />
+            /> */}
           </div>
         </div>
       </footer>
