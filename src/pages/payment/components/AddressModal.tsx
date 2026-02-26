@@ -79,14 +79,10 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
       throw new Error('No address found in response');
 
     } catch (error) {
-      console.error(`Reverse geocode error (isRetry: ${isRetry}):`, error);
-
       if (!isRetry) {
-        console.log("Mencoba ulang deteksi alamat dalam 1 detik...");
         await new Promise(resolve => setTimeout(resolve, 1000));
         return reverseGeocode(lat, lng, true);
       }
-
       setFormData(prev => ({ ...prev, alamatLengkap: '' }));
       return false;
     }
@@ -101,7 +97,6 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
     setIsLocating(true);
 
     const successCallback = async (position: GeolocationPosition) => {
-      console.log("Geolocation success:", position.coords);
       const { latitude, longitude } = position.coords;
 
       setCoords({ lat: latitude, lng: longitude });
@@ -117,14 +112,11 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
       setIsLocating(false);
     };
 
-    const errorCallback = (error: GeolocationPositionError) => {
-      console.error("Geolocation error (Attempt 1):", error);
-
-      console.log("Retrying with low accuracy...");
+    const errorCallback = (_error: GeolocationPositionError) => {
       navigator.geolocation.getCurrentPosition(
         successCallback,
         (secondError) => {
-          console.error("Geolocation error (Attempt 2):", secondError);
+
           let message = "Gagal mendapatkan lokasi.";
           if (secondError.code === 1) message = "Izin lokasi ditolak. Aktifkan izin lokasi di browser.";
           else if (secondError.code === 2) message = "Lokasi tidak tersedia. Pastikan Wi-Fi/GPS aktif.";

@@ -46,7 +46,7 @@ export const OrderDetail = ({ data }: OrderDetailProps) => {
         </div>
         <div className="flex items-center gap-2 text-gray-800 mb-1">
           <p className="text-xs text-gray-600">Ada kendala atau pertanyaan tentang dokumen? </p>
-          <a href="https://wa.me/6281110139532" target="_blank" rel="noreferrer" className="text-xs text-kang-pajak-blue font-bold hover:underline">
+          <a href="https://wa.me/6281110139532" target="_blank" rel="noopener noreferrer" className="text-xs text-kang-pajak-blue font-bold hover:underline">
             Hubungi CS Kang Pajak di Whatsapp dengan klik di sini.
           </a>
         </div>

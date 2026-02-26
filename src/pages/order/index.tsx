@@ -94,7 +94,6 @@ export const OrderForm = () => {
         });
       }
     } catch (error) {
-      console.error(error);
       toast.error("Gagal mengecek data kendaraan. Silakan coba lagi.");
     } finally {
       setIsLoading(false);

@@ -35,27 +35,19 @@ export interface VehicleTaxResponse {
 export const checkVehicleTax = async (plate: string): Promise<VehicleTaxResponse> => {
     const normalizedPlate = plate.replace(/\s/g, '').toUpperCase();
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Bearer ${import.meta.env.VITE_SAMBARA_TOKEN}`);
-
-    const raw = JSON.stringify({
-        "plat": normalizedPlate
-    });
-
-    const requestOptions: RequestInit = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-    };
-
     try {
-        const response = await fetch(`${import.meta.env.VITE_SAMBARA_BASE_URL}/sambara/info-pkb?isFake=true`, requestOptions);
+        const response = await fetch('/api/get-vehicle-info', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "plat": normalizedPlate
+            })
+        });
         const result = await response.json();
         return result;
     } catch (error) {
-        console.error('Error checking vehicle tax:', error);
         throw error;
     }
 };
