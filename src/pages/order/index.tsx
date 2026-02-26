@@ -12,7 +12,7 @@ import { OrderServiceInfo } from './components/OrderServiceInfo';
 import servicesConfig from './data/services-config.json';
 import { orderSchema, OrderFormData } from './types';
 import { checkVehicleTax } from '@/api/vehicle';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 
@@ -41,6 +41,13 @@ export const OrderForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const { ...rest } = orderData;
+    Object.entries(rest).forEach(([key, value]) => {
+      setValue(key as keyof OrderFormData, value as any);
+    });
+  }, [orderData, setValue]);
+
   const onSubmit = async (data: OrderFormData) => {
     setIsLoading(true);
     try {
@@ -61,17 +68,17 @@ export const OrderForm = () => {
           return;
         }
 
-        if (response.data.NO_RANGKA !== data.no_rangka.toUpperCase()) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Data Tidak Sesuai',
-            text: 'Nomor rangka tidak cocok dengan data kendaraan.',
-            confirmButtonColor: '#27AAE1',
-            confirmButtonText: 'Cek Lagi'
-          });
-          setIsLoading(false);
-          return;
-        }
+        // if (response.data.NO_RANGKA !== data.no_rangka.toUpperCase()) {
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: 'Data Tidak Sesuai',
+        //     text: 'Nomor rangka tidak cocok dengan data kendaraan.',
+        //     confirmButtonColor: '#27AAE1',
+        //     confirmButtonText: 'Cek Lagi'
+        //   });
+        //   setIsLoading(false);
+        //   return;
+        // }
 
         setOrderData({
           ...data,
@@ -160,12 +167,12 @@ export const OrderForm = () => {
                       <Input
                         {...register(fieldId)}
                         onChange={(e) => {
-                          if (fieldId === 'plateNumber' || fieldId === 'no_rangka') {
+                          if (fieldId === 'plateNumber') {
                             e.target.value = e.target.value.toUpperCase();
                           }
                           register(fieldId).onChange(e);
                         }}
-                        className={`${inputStyles} ${(fieldId === 'plateNumber' || fieldId === 'no_rangka') ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
+                        className={`${inputStyles} ${(fieldId === 'plateNumber') ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
                       />
                     )}
 

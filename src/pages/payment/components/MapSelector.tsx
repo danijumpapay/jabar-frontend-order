@@ -52,7 +52,7 @@ const SearchControl = ({ onChange }: { onChange: (lat: number, lng: number) => v
             }
         };
 
-        // Handle raw input for coordinates fallback
+
         const handleRawSearch = (e: any) => {
             const query = e.query;
             const coordRegex = /^(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)$/;

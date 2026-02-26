@@ -10,7 +10,6 @@ export const orderSchema = z.object({
   plateNumber: z.string()
     .min(4, 'Nomor plat minimal 4 karakter')
     .regex(/^[A-Z]+\s[0-9]+\s[A-Z]+$/, 'Format wajib menggunakan spasi (Contoh: D 1234 ABC)'),
-  no_rangka: z.string().min(1, 'Nomor rangka lengkap wajib diisi'),
   jenisMutasi: z.string().optional(),
   jenisKendaraan: z.string().optional(),
   isDataMatch: z.string().optional(),

@@ -47,13 +47,9 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
 
   const reverseGeocode = async (lat: number, lng: number, isRetry = false): Promise<boolean> => {
     if (!lat || !lng) return false;
-
-    // Tampilkan status di input hanya pada percobaan pertama
     if (!isRetry) setFormData(prev => ({ ...prev, alamatLengkap: 'Mencari alamat...' }));
 
     try {
-      // Menggunakan format json (bukan jsonv2) terkadang lebih stabil
-      // Menghilangkan zoom agar server lebih fleksibel mencari data terdekat
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=id&addressdetails=1&_cb=${Date.now()}`;
 
       const response = await fetch(url, {
@@ -85,7 +81,6 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
     } catch (error) {
       console.error(`Reverse geocode error (isRetry: ${isRetry}):`, error);
 
-      // Jika gagal percobaan pertama, tunggu 1 detik lalu coba lagi (Retry)
       if (!isRetry) {
         console.log("Mencoba ulang deteksi alamat dalam 1 detik...");
         await new Promise(resolve => setTimeout(resolve, 1000));

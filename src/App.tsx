@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navbar } from './components/shared/Navbar';
 import { HomePage } from './pages/home';
 import { OrderForm } from './pages/order';
@@ -14,7 +15,38 @@ import { Home, Search, Video, HelpCircle } from 'lucide-react';
 import { Toaster } from 'sonner';
 
 function App() {
-  const { step, view, setView, setStep, setOrderId } = useOrderStore();
+  const { step, view, setView, setStep, setOrderId, orderData, selectedService } = useOrderStore();
+
+  useEffect(() => {
+    const isStep2Invalid = step === 2 && !selectedService;
+    const isStep3Invalid = step >= 3 && (
+      !selectedService ||
+      !orderData.name?.trim() ||
+      !orderData.email?.trim() ||
+      !orderData.whatsapp?.trim() ||
+      !orderData.nik?.trim() ||
+      !orderData.plateNumber?.trim() ||
+      !orderData.apiVehicleData
+    );
+
+    if (view === 'order') {
+      if (isStep2Invalid) {
+        setStep(1);
+      } else if (isStep3Invalid) {
+        setStep(2);
+      }
+    }
+  }, [step, selectedService, orderData, setStep, view]);
+
+  const isFormDataIncomplete = (
+    !selectedService ||
+    !orderData.name?.trim() ||
+    !orderData.email?.trim() ||
+    !orderData.whatsapp?.trim() ||
+    !orderData.nik?.trim() ||
+    !orderData.plateNumber?.trim() ||
+    !orderData.apiVehicleData
+  );
 
   const renderContent = () => {
     if (view === 'promo-detail') return <PromoDetailPage />;
@@ -22,6 +54,11 @@ function App() {
     if (view === 'refund') return <RefundPage />;
     if (view === 'bantuan') return <HelpPage />;
     if (view === 'tutorial') return <TutorialPage />;
+
+    if (view === 'order') {
+      if (step === 2 && !selectedService) return <HomePage />;
+      if (step >= 3 && isFormDataIncomplete) return <OrderForm />;
+    }
 
     switch (step) {
       case 1: return <HomePage />;
@@ -68,11 +105,11 @@ function App() {
               alt="Bapenda Jabar"
               className="h-8 md:h-8 w-auto grayscale-0 opacity-100 transition-all duration-500 object-contain mt-5"
             />
-            {/* <img
+            <img
               src="/payments/bjb.svg"
               alt="Bank BJB"
               className="h-8 md:h-8 w-auto grayscale-0 opacity-100 transition-all duration-500 object-contain"
-            /> */}
+            />
           </div>
         </div>
       </footer>

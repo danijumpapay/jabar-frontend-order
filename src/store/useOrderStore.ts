@@ -11,6 +11,7 @@ interface Service {
 }
 
 interface OrderData {
+  name?: string;
   email?: string;
   whatsapp?: string;
   nik?: string;
@@ -55,6 +56,11 @@ export const useOrderStore = create<OrderState>()(
       selectedPromoId: null,
       orderId: null,
       orderData: {
+        name: '',
+        email: '',
+        whatsapp: '',
+        nik: '',
+        plateNumber: '',
         jenisKendaraan: 'Mobil',
         jenisMutasi: 'Lengkap',
         isDataMatch: 'Ya',
@@ -66,7 +72,22 @@ export const useOrderStore = create<OrderState>()(
       setStep: (step) => set({ step }),
 
       setService: (service) =>
-        set({ selectedService: service, step: 2, view: 'order' }),
+        set({
+          selectedService: service,
+          step: 2,
+          view: 'order',
+          orderData: {
+            name: '',
+            email: '',
+            whatsapp: '',
+            nik: '',
+            plateNumber: '',
+            jenisKendaraan: 'Mobil',
+            jenisMutasi: 'Lengkap',
+            isDataMatch: 'Ya',
+            finalTotal: 0
+          }
+        }),
 
       setSelectedPromoId: (id) => set({ selectedPromoId: id }),
 
@@ -91,6 +112,11 @@ export const useOrderStore = create<OrderState>()(
           selectedPromoId: null,
           orderId: null,
           orderData: {
+            name: '',
+            email: '',
+            whatsapp: '',
+            nik: '',
+            plateNumber: '',
             jenisKendaraan: 'Mobil',
             jenisMutasi: 'Lengkap',
             isDataMatch: 'Ya',
