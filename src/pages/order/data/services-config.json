@@ -30,7 +30,7 @@
     {
       "id": "plateNumber",
       "label": "Plat Nomor",
-      "info": "Contoh: D 1234 ABC (wajib menggunakan spasi)",
+      "info": "Contoh: D 1234 ABC atau D1234ABC",
       "type": "text",
       "required": true
     }

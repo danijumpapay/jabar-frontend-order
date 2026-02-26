@@ -9,7 +9,7 @@ export const orderSchema = z.object({
   nik: z.string().min(16, 'NIK wajib 16 digit').max(16, 'NIK wajib 16 digit'),
   plateNumber: z.string()
     .min(4, 'Nomor plat minimal 4 karakter')
-    .regex(/^[A-Z]+\s[0-9]+\s[A-Z]+$/, 'Format wajib menggunakan spasi (Contoh: D 1234 ABC)'),
+    .regex(/^[A-Z]+\s*[0-9]+\s*[A-Z]+$/, 'Format plat nomor (Contoh: D 1234 ABC atau D1234ABC)'),
   jenisMutasi: z.string().optional(),
   jenisKendaraan: z.string().optional(),
   isDataMatch: z.string().optional(),
