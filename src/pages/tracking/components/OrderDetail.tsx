@@ -23,23 +23,6 @@ export const OrderDetail = ({ data }: OrderDetailProps) => {
       <div className="bg-gray-50 rounded-2xl p-6 md:p-8 space-y-4 border border-gray-100/50 text-left">
         <p className="text-sm font-bold text-gray-800">Kang Pajak akan membantu pengurusan dokumenmu</p>
 
-        {/* <p className="text-xs text-gray-600">Untuk proses tahunan an. Pribadi, berikut dokumen yang akan kami ambil :</p>
-        <ul className="text-xs text-gray-600 space-y-2 list-disc ml-4">
-          <li>Asli STNK lengkap bolak balik</li>
-          <li>Asli eKTP</li>
-        </ul>
-
-        <div className="pt-2 flex flex-col gap-3">
-          <p className="text-xs text-gray-600">Untuk proses tahunan an. PT, klik tombol di bawah untuk melihat detail dokumen :</p>
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center gap-2 bg-white border border-kang-pajak-blue text-kang-pajak-blue px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-blue-50 transition-all shadow-sm w-fit"
-          >
-            <Building2 size={14} />
-            LIHAT SYARAT DOKUMEN PT
-          </button>
-        </div> */}
-
         <div className="flex items-center gap-2 text-gray-800 mb-1">
           <Clock className="text-kang-pajak-blue w-[50px] h-[50px] md:w-5 md:h-5" />
           <p className="text-sm">Dokumen milikmu akan diantarkan pada: <span className="text-green-600 font-bold ml-1">1 Februari 2026 | 08.00 - 20.00</span></p>

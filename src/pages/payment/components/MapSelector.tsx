@@ -119,7 +119,6 @@ export const MapSelector = ({ lat, lng, onChange, onLocate, isLocating }: MapSel
                 style={{ height: '100%', width: '100%' }}
                 zoomControl={false}
             >
-                {/* Google Maps Style Tile Layer */}
                 <TileLayer
                     url="https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
                     subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
@@ -129,7 +128,6 @@ export const MapSelector = ({ lat, lng, onChange, onLocate, isLocating }: MapSel
                 <SearchControl onChange={onChange} />
             </MapContainer>
 
-            {/* Floating Location Controls */}
             <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
                 {onLocate && (
                     <button

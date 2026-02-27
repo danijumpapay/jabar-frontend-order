@@ -68,18 +68,6 @@ export const OrderForm = () => {
           return;
         }
 
-        // if (response.data.NO_RANGKA !== data.no_rangka.toUpperCase()) {
-        //   Swal.fire({
-        //     icon: 'error',
-        //     title: 'Data Tidak Sesuai',
-        //     text: 'Nomor rangka tidak cocok dengan data kendaraan.',
-        //     confirmButtonColor: '#27AAE1',
-        //     confirmButtonText: 'Cek Lagi'
-        //   });
-        //   setIsLoading(false);
-        //   return;
-        // }
-
         setOrderData({
           ...data,
           apiVehicleData: response.data
