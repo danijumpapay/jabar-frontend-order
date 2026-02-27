@@ -15,7 +15,8 @@ export default defineConfig(({ mode }) => {
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Permissions-Policy": "camera=(), microphone=(), geolocation=(self)",
         "X-Permitted-Cross-Domain-Policies": "none",
-        "Cross-Origin-Resource-Policy": "same-site"
+        "Cross-Origin-Resource-Policy": "same-site",
+        "Access-Control-Allow-Origin": "http://localhost:5173"
       },
       proxy: {
         '/api': {
