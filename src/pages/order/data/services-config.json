@@ -33,6 +33,13 @@
       "info": "Contoh: D 1234 ABC atau D1234ABC",
       "type": "text",
       "required": true
+    },
+    {
+      "id": "no_rangka",
+      "label": "Nomor Rangka Kendaraan",
+      "info": "Masukkan nomor rangka lengkap sesuai STNK",
+      "type": "text",
+      "required": true
     }
   ],
   "services": [

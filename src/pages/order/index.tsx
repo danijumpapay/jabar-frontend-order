@@ -1,4 +1,4 @@
-import { useForm, FieldError } from 'react-hook-form';
+import { useForm, FieldError, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Info } from 'lucide-react';
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,7 @@ export const OrderForm = () => {
     ...(config?.extraFields as unknown as FormField[] || [])
   ];
 
-  const { register, handleSubmit, setValue, trigger, formState: { errors } } = useForm<OrderFormData>({
+  const { register, handleSubmit, setValue, trigger, control, formState: { errors } } = useForm<OrderFormData>({
     resolver: zodResolver(orderSchema),
     defaultValues: orderData
   });
@@ -44,9 +44,21 @@ export const OrderForm = () => {
   useEffect(() => {
     const { ...rest } = orderData;
     Object.entries(rest).forEach(([key, value]) => {
-      setValue(key as keyof OrderFormData, value as any);
+      if (value !== undefined && value !== null) {
+        setValue(key as keyof OrderFormData, value as any);
+      }
     });
-  }, [orderData, setValue]);
+  }, []);
+
+  const watchedValues = useWatch({ control });
+  useEffect(() => {
+    const filteredValues = Object.fromEntries(
+      Object.entries(watchedValues).filter(([, v]) => v !== undefined)
+    ) as Partial<OrderFormData>;
+    if (Object.keys(filteredValues).length > 0) {
+      setOrderData(filteredValues);
+    }
+  }, [watchedValues]);
 
   const onSubmit = async (data: OrderFormData) => {
     setIsLoading(true);
@@ -61,6 +73,18 @@ export const OrderForm = () => {
             icon: 'error',
             title: 'Data Tidak Sesuai',
             text: 'NIK tidak cocok dengan data kendaraan.',
+            confirmButtonColor: '#27AAE1',
+            confirmButtonText: 'Cek Lagi'
+          });
+          setIsLoading(false);
+          return;
+        }
+
+        if (response.data.NO_RANGKA !== data.no_rangka.toUpperCase()) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Data Tidak Sesuai',
+            text: 'Nomor rangka tidak cocok dengan data kendaraan.',
             confirmButtonColor: '#27AAE1',
             confirmButtonText: 'Cek Lagi'
           });
@@ -154,12 +178,12 @@ export const OrderForm = () => {
                       <Input
                         {...register(fieldId)}
                         onChange={(e) => {
-                          if (fieldId === 'plateNumber') {
+                          if (fieldId === 'plateNumber' || fieldId === 'no_rangka') {
                             e.target.value = e.target.value.toUpperCase();
                           }
                           register(fieldId).onChange(e);
                         }}
-                        className={`${inputStyles} ${(fieldId === 'plateNumber') ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
+                        className={`${inputStyles} ${(fieldId === 'plateNumber' || fieldId === 'no_rangka') ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
                       />
                     )}
 

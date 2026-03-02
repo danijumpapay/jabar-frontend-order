@@ -16,6 +16,7 @@ interface OrderData {
   whatsapp?: string;
   nik?: string;
   plateNumber?: string;
+  no_rangka?: string;
   jenisKendaraan?: string;
   jenisMutasi?: string;
   isDataMatch?: string;
@@ -61,6 +62,7 @@ export const useOrderStore = create<OrderState>()(
         whatsapp: '',
         nik: '',
         plateNumber: '',
+        no_rangka: '',
         jenisKendaraan: 'Mobil',
         jenisMutasi: 'Lengkap',
         isDataMatch: 'Ya',
@@ -72,21 +74,27 @@ export const useOrderStore = create<OrderState>()(
       setStep: (step) => set({ step }),
 
       setService: (service) =>
-        set({
-          selectedService: service,
-          step: 2,
-          view: 'order',
-          orderData: {
-            name: '',
-            email: '',
-            whatsapp: '',
-            nik: '',
-            plateNumber: '',
-            jenisKendaraan: 'Mobil',
-            jenisMutasi: 'Lengkap',
-            isDataMatch: 'Ya',
-            finalTotal: 0
-          }
+        set((state) => {
+          const isSameService = state.selectedService?.id === service.id;
+          return {
+            selectedService: service,
+            step: 2,
+            view: 'order',
+            orderData: isSameService
+              ? state.orderData
+              : {
+                name: '',
+                email: '',
+                whatsapp: '',
+                nik: '',
+                plateNumber: '',
+                no_rangka: '',
+                jenisKendaraan: 'Mobil',
+                jenisMutasi: 'Lengkap',
+                isDataMatch: 'Ya',
+                finalTotal: 0
+              }
+          };
         }),
 
       setSelectedPromoId: (id) => set({ selectedPromoId: id }),
@@ -117,6 +125,7 @@ export const useOrderStore = create<OrderState>()(
             whatsapp: '',
             nik: '',
             plateNumber: '',
+            no_rangka: '',
             jenisKendaraan: 'Mobil',
             jenisMutasi: 'Lengkap',
             isDataMatch: 'Ya',
