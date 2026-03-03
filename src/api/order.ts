@@ -50,3 +50,15 @@ export const getOrderDetail = async (bookingId: string) => {
         };
     }
 };
+export const getPaymentStatus = async (id: string) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/orders/${id}/payment-status`);
+        return response.data;
+    } catch (error: any) {
+        console.error('Get Payment Status Error:', error);
+        return {
+            success: false,
+            message: error.response?.data?.message || 'Failed to get status'
+        };
+    }
+};

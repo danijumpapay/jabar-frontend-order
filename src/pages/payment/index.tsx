@@ -86,6 +86,7 @@ export const PaymentPage = () => {
             latitude={addressData.latitude}
             longitude={addressData.longitude}
             isDetailValid={isDetailValid}
+            paymentMethod={selectedMethod}
             onPayClick={() => setStep(4)}
           />
         </div>

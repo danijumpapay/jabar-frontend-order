@@ -3,7 +3,7 @@ import { PriceDetailModal } from './PriceDetailModal';
 import { CheckCircle2, Ticket, XCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { useOrderStore } from '@/store/useOrderStore';
 import { formatCurrency } from '@/lib/utils';
-import { parseCurrency } from '@/lib/order-utils';
+import { parseCurrency, getVehicleType } from '@/lib/order-utils';
 import { createOrder } from '@/api/order';
 import { toast } from 'sonner';
 
@@ -16,10 +16,11 @@ interface OrderSummaryProps {
   latitude?: number;
   longitude?: number;
   isDetailValid?: boolean;
+  paymentMethod?: string;
   onPayClick?: () => void;
 }
 
-export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address, city, latitude, longitude, onPayClick, isDetailValid = true }: OrderSummaryProps) => {
+export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address, city, latitude, longitude, onPayClick, isDetailValid = true, paymentMethod = 'BJB' }: OrderSummaryProps) => {
   const { setStep, setOrderId, setBookingId, orderData, setOrderData, selectedService, selectedPromoId } = useOrderStore();
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
   const [voucherCode, setVoucherCode] = useState('');
@@ -95,6 +96,8 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
     setIsSubmitting(true);
 
     try {
+      const derivedVehicleType = getVehicleType(apiVehicleData?.SWD_POKOK);
+
       const payload = {
         name: orderData.name || '',
         email: orderData.email || '',
@@ -108,11 +111,12 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         address: address || '',
         latitude: latitude,
         longitude: longitude,
+        isSamsatPickup: deliveryFee === 0,
         city: city || orderData.kotaTujuan || '',
-        paymentMethod: 'BJB',
+        paymentMethod: paymentMethod || 'BJB',
         voucherCode: voucherCode || '',
         promoId: selectedPromoId || '',
-        vehicleType: orderData.vehicleType || 'Mobil',
+        vehicleType: derivedVehicleType,
         mutationType: orderData.mutationType || 'Lengkap',
         taxData: apiVehicleData,
       };
@@ -124,7 +128,9 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         setBookingId(response.results.bookingId);
         setOrderData({
           ...orderData,
-          totalAmount: totalAmount
+          totalAmount: totalAmount,
+          finalTotal: response.results.finalTotal,
+          paymentDetails: response.results.paymentDetails
         });
 
         if (onPayClick) {

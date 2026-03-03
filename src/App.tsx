@@ -18,6 +18,10 @@ function App() {
   const { step, view, setView, setStep, setOrderId, orderData, selectedService } = useOrderStore();
 
   useEffect(() => {
+    if (step >= 4 && (orderData?.paymentDetails || useOrderStore.getState().orderId)) {
+      return;
+    }
+
     const isStep2Invalid = step === 2 && !selectedService;
     const isStep3Invalid = step >= 3 && (
       !selectedService ||
@@ -56,8 +60,12 @@ function App() {
     if (view === 'tutorial') return <TutorialPage />;
 
     if (view === 'order') {
-      if (step === 2 && !selectedService) return <HomePage />;
-      if (step >= 3 && isFormDataIncomplete) return <OrderForm />;
+      const isPaymentPhase = step >= 4 && (orderData.paymentDetails || useOrderStore.getState().orderId);
+
+      if (!isPaymentPhase) {
+        if (step === 2 && !selectedService) return <HomePage />;
+        if (step >= 3 && isFormDataIncomplete) return <OrderForm />;
+      }
     }
 
     switch (step) {
@@ -100,11 +108,6 @@ function App() {
               Mitra Resmi
             </p>
             <div className="h-4 w-px bg-gray-200 hidden md:block mt-4"></div>
-            {/* <img
-              src="/logo-bapenda-jabar.png"
-              alt="Bapenda Jabar"
-              className="h-8 md:h-8 w-auto grayscale-0 opacity-100 transition-all duration-500 object-contain mt-5"
-            /> */}
             <img
               src="/payments/bjb.svg"
               alt="Bank BJB"

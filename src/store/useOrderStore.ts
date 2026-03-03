@@ -27,6 +27,8 @@ interface OrderData {
   bpkb?: File | null;
   totalAmount?: number;
   apiVehicleData?: VehicleTaxData;
+  finalTotal?: number;
+  paymentDetails?: any;
 }
 
 interface OrderState {
@@ -66,10 +68,12 @@ export const useOrderStore = create<OrderState>()(
         identityNumber: '',
         plateNumber: '',
         chassisNumber: '',
-        vehicleType: 'Mobil',
-        mutationType: 'Lengkap',
-        isDataMatch: 'Ya',
-        totalAmount: 0
+        vehicleType: '',
+        mutationType: '',
+        isDataMatch: '',
+        totalAmount: 0,
+        finalTotal: 0,
+        paymentDetails: null
       },
 
       setView: (view) => set({ view }),
@@ -92,10 +96,12 @@ export const useOrderStore = create<OrderState>()(
                 identityNumber: '',
                 plateNumber: '',
                 chassisNumber: '',
-                vehicleType: 'Mobil',
-                mutationType: 'Lengkap',
-                isDataMatch: 'Ya',
-                totalAmount: 0
+                vehicleType: '',
+                mutationType: '',
+                isDataMatch: '',
+                totalAmount: 0,
+                finalTotal: 0,
+                paymentDetails: null
               }
           };
         }),
@@ -132,10 +138,12 @@ export const useOrderStore = create<OrderState>()(
             identityNumber: '',
             plateNumber: '',
             chassisNumber: '',
-            vehicleType: 'Mobil',
-            mutationType: 'Lengkap',
-            isDataMatch: 'Ya',
-            totalAmount: 0
+            vehicleType: '',
+            mutationType: '',
+            isDataMatch: '',
+            totalAmount: 0,
+            finalTotal: 0,
+            paymentDetails: null
           }
         }),
     }),

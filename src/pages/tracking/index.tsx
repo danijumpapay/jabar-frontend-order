@@ -31,7 +31,27 @@ export const TrackingPage = () => {
     try {
       const response = await getOrderDetail(targetId);
       if (response.success && response.results) {
-        setOrderData(response.results);
+        const order = response.results;
+
+
+        if (order.orderStatusId === 7) {
+          useOrderStore.getState().setOrderId(order.orderId);
+          useOrderStore.getState().setBookingId(order.bookingId);
+          useOrderStore.getState().setOrderData({
+            name: order.name,
+            email: order.email,
+            phoneNumber: order.phoneNumber,
+            plateNumber: order.plateNumber,
+            finalTotal: order.finalTotal,
+            paymentDetails: order.paymentDetails
+          });
+          useOrderStore.getState().setStep(4);
+          useOrderStore.getState().setView('order');
+          toast.success("Melanjutkan proses pembayaran...");
+          return;
+        }
+
+        setOrderData(order);
         setStatus('found');
 
         if (!history.includes(targetId)) {
@@ -118,7 +138,7 @@ export const TrackingPage = () => {
               </span>
             </div>
 
-            <OrderDetail data={currentOrderDisplayData} />
+            <OrderDetail data={currentOrderDisplayData} orderDate={orderData.createdAt} />
 
             <div className="py-4">
               <StatusTimeline steps={orderData.steps} />

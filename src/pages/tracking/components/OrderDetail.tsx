@@ -4,10 +4,37 @@ import { OrderInfo } from '../types';
 
 interface OrderDetailProps {
   data: OrderInfo[];
+  orderDate?: string;
 }
 
-export const OrderDetail = ({ data }: OrderDetailProps) => {
+export const OrderDetail = ({ data, orderDate }: OrderDetailProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const calculateDeliveryDate = (dateStr?: string) => {
+
+    const date = dateStr ? new Date(dateStr) : new Date();
+
+
+    if (isNaN(date.getTime())) return "Segera | 08.00 - 20.00";
+
+    const deliveryDate = new Date(date);
+    deliveryDate.setDate(deliveryDate.getDate() + 1);
+
+
+    if (deliveryDate.getDay() === 6) {
+      deliveryDate.setDate(deliveryDate.getDate() + 2);
+    } else if (deliveryDate.getDay() === 0) {
+      deliveryDate.setDate(deliveryDate.getDate() + 1);
+    }
+
+    return new Intl.DateTimeFormat('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }).format(deliveryDate) + " | 08.00 - 20.00";
+  };
+
+  const deliveryDisplay = calculateDeliveryDate(orderDate);
 
   return (
     <div className="space-y-10">
@@ -25,7 +52,7 @@ export const OrderDetail = ({ data }: OrderDetailProps) => {
 
         <div className="flex items-center gap-2 text-gray-800 mb-1">
           <Clock className="text-kang-pajak-blue w-[50px] h-[50px] md:w-5 md:h-5" />
-          <p className="text-sm">Dokumen milikmu akan diantarkan pada: <span className="text-green-600 font-bold ml-1">1 Februari 2026 | 08.00 - 20.00</span></p>
+          <p className="text-sm">Dokumen milikmu akan diantarkan pada: <span className="text-green-600 font-bold ml-1">{deliveryDisplay}</span></p>
         </div>
         <div className="flex items-center gap-2 text-gray-800 mb-1">
           <p className="text-xs text-gray-600">Ada kendala atau pertanyaan tentang dokumen? </p>
