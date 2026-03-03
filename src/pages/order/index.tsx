@@ -10,7 +10,7 @@ import { useOrderStore } from '@/store/useOrderStore';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import { OrderServiceInfo } from './components/OrderServiceInfo';
 import servicesConfig from './data/services-config.json';
-import { orderSchema, OrderFormData } from './types';
+import { orderSchema, OrderFormData } from './types/index';
 import { checkVehicleTax } from '@/api/vehicle';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -29,6 +29,7 @@ export const OrderForm = () => {
   const { selectedService, orderData, setOrderData, nextStep } = useOrderStore();
 
   const config = servicesConfig.services.find(s => s.id === selectedService?.id);
+
   const allFields: FormField[] = [
     ...(servicesConfig.defaultFields as unknown as FormField[]),
     ...(config?.extraFields as unknown as FormField[] || [])
@@ -36,7 +37,7 @@ export const OrderForm = () => {
 
   const { register, handleSubmit, setValue, trigger, control, formState: { errors } } = useForm<OrderFormData>({
     resolver: zodResolver(orderSchema),
-    defaultValues: orderData
+    defaultValues: orderData as any
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +69,7 @@ export const OrderForm = () => {
 
       if (response.success && response.data) {
         const apiNik = response.data.NO_KTP;
-        if (apiNik !== data.nik) {
+        if (apiNik !== data.identityNumber) {
           Swal.fire({
             icon: 'error',
             title: 'Data Tidak Sesuai',
@@ -80,7 +81,7 @@ export const OrderForm = () => {
           return;
         }
 
-        if (response.data.NO_RANGKA !== data.no_rangka.toUpperCase()) {
+        if (response.data.NO_RANGKA !== data.chassisNumber.toUpperCase()) {
           Swal.fire({
             icon: 'error',
             title: 'Data Tidak Sesuai',
@@ -149,18 +150,18 @@ export const OrderForm = () => {
                       )}
                     </div>
 
-                    {fieldId === 'whatsapp' ? (
+                    {fieldId === 'phoneNumber' ? (
                       <div className="flex gap-2">
                         <div className="bg-gray-100 border border-gray-200 px-4 py-3.5 rounded-xl text-gray-500 text-sm flex items-center font-bold">+62</div>
                         <Input
-                          {...register('whatsapp')}
+                          {...register('phoneNumber')}
                           className={`${inputStyles} flex-1 ${error ? 'border-red-500' : ''}`}
                         />
                       </div>
                     ) : field.type === 'select' ? (
                       <Select
                         onValueChange={(val) => {
-                          setValue(fieldId, val as OrderFormData[keyof OrderFormData]);
+                          setValue(fieldId, val as any);
                           trigger(fieldId);
                         }}
                         defaultValue={String(orderData[fieldId as keyof typeof orderData] || '')}
@@ -178,12 +179,12 @@ export const OrderForm = () => {
                       <Input
                         {...register(fieldId)}
                         onChange={(e) => {
-                          if (fieldId === 'plateNumber' || fieldId === 'no_rangka') {
+                          if (fieldId === 'plateNumber' || fieldId === 'chassisNumber') {
                             e.target.value = e.target.value.toUpperCase();
                           }
                           register(fieldId).onChange(e);
                         }}
-                        className={`${inputStyles} ${(fieldId === 'plateNumber' || fieldId === 'no_rangka') ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
+                        className={`${inputStyles} ${(fieldId === 'plateNumber' || fieldId === 'chassisNumber') ? 'uppercase' : ''} ${error ? 'border-red-500' : ''}`}
                       />
                     )}
 

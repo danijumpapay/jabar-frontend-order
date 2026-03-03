@@ -1,27 +1,33 @@
 import { useState } from 'react';
 import { PriceDetailModal } from './PriceDetailModal';
-import { CheckCircle2, Ticket, XCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle2, Ticket, XCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { useOrderStore } from '@/store/useOrderStore';
 import { formatCurrency } from '@/lib/utils';
 import { parseCurrency } from '@/lib/order-utils';
+import { createOrder } from '@/api/order';
+import { toast } from 'sonner';
 
 interface OrderSummaryProps {
   serviceImage?: string;
   serviceTitle?: string;
   deliveryFee: number;
   address?: string;
+  city?: string;
+  latitude?: number;
+  longitude?: number;
   isDetailValid?: boolean;
   onPayClick?: () => void;
 }
 
-export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address, onPayClick, isDetailValid = true }: OrderSummaryProps) => {
-  const { setStep, setOrderId, orderData, setOrderData } = useOrderStore();
+export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address, city, latitude, longitude, onPayClick, isDetailValid = true }: OrderSummaryProps) => {
+  const { setStep, setOrderId, setBookingId, orderData, setOrderData, selectedService, selectedPromoId } = useOrderStore();
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
   const [voucherCode, setVoucherCode] = useState('');
   const [appliedVoucherType, setAppliedVoucherType] = useState<'NONE' | 'DISCOUNT' | 'ONGKIR'>('NONE');
   const [voucherError, setVoucherError] = useState(false);
   const [addressError, setAddressError] = useState(false);
   const [detailError, setDetailError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { apiVehicleData } = orderData;
 
@@ -43,7 +49,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
   const currentPickupFee = (isOngkirVoucher || deliveryFee === 0) ? 0 : deliveryFee;
   const discountAmount = isDiscountVoucher ? Math.round(baseSubtotal * 0.05) : 0;
 
-  const finalTotal = baseSubtotal + adminFee + currentPickupFee - discountAmount;
+  const totalAmount = baseSubtotal + adminFee + currentPickupFee - discountAmount;
   const modalTotal = baseSubtotal - discountAmount;
 
   const handleApplyVoucher = () => {
@@ -66,7 +72,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
     setVoucherError(false);
   };
 
-  const handlePayNow = () => {
+  const handlePayNow = async () => {
     setAddressError(false);
     setDetailError(false);
 
@@ -86,19 +92,55 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
       return;
     }
 
-    setAddressError(false);
-    setOrderId("12345");
-    setOrderData({
-      ...orderData,
-      finalTotal: finalTotal
-    });
+    setIsSubmitting(true);
 
-    if (onPayClick) {
-      onPayClick();
-    } else {
-      setStep(4);
+    try {
+      const payload = {
+        name: orderData.name || '',
+        email: orderData.email || '',
+        phoneNumber: orderData.phoneNumber || '',
+        identityNumber: orderData.identityNumber || '',
+        plateNumber: orderData.plateNumber || '',
+        chassisNumber: orderData.chassisNumber || '',
+        serviceId: selectedService?.id || '1',
+        deliveryFee: deliveryFee,
+        totalAmount: totalAmount,
+        address: address || '',
+        latitude: latitude,
+        longitude: longitude,
+        city: city || orderData.kotaTujuan || '',
+        paymentMethod: 'BJB',
+        voucherCode: voucherCode || '',
+        promoId: selectedPromoId || '',
+        vehicleType: orderData.vehicleType || 'Mobil',
+        mutationType: orderData.mutationType || 'Lengkap',
+        taxData: apiVehicleData,
+      };
+
+      const response = await createOrder(payload);
+
+      if (response.success && response.results) {
+        setOrderId(response.results.orderId);
+        setBookingId(response.results.bookingId);
+        setOrderData({
+          ...orderData,
+          totalAmount: totalAmount
+        });
+
+        if (onPayClick) {
+          onPayClick();
+        } else {
+          setStep(4);
+        }
+        window.scrollTo(0, 0);
+      } else {
+        toast.error(response.message || "Terjadi kesalahan saat membuat order");
+      }
+    } catch (err) {
+      toast.error("Terjadi kesalahan. Silakan coba lagi nanti.");
+    } finally {
+      setIsSubmitting(false);
     }
-    window.scrollTo(0, 0);
   };
 
   const priceBreakdown = [
@@ -139,7 +181,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
       </div>
 
       <div className="mb-8 space-y-3">
-        <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1">Voucher Code</label>
+        <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1">Kode Voucher</label>
         <div className="relative flex gap-2">
           <div className="relative flex-1">
             <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -215,7 +257,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         <div className="pt-6 border-t border-dashed border-gray-200 flex justify-between items-center">
           <span className="font-bold text-gray-800 text-lg">Total</span>
           <span className="text-2xl font-black text-gray-900 underline decoration-gray-100 underline-offset-8">
-            {formatCurrency(finalTotal)}
+            {formatCurrency(totalAmount)}
           </span>
         </div>
       </div>
@@ -240,9 +282,15 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
 
       <button
         onClick={handlePayNow}
-        className="btn-kang-primary w-full text-white py-4 rounded-2xl font-extrabold text-base mt-8 shadow-lg shadow-sky-100 transition-all active:scale-[0.98]"
+        disabled={isSubmitting}
+        className="btn-kang-primary w-full text-white py-4 rounded-2xl font-extrabold text-base mt-8 shadow-lg shadow-sky-100 transition-all active:scale-[0.98] disabled:opacity-70 disabled:pointer-events-none flex items-center justify-center gap-2"
       >
-        Bayar Sekarang
+        {isSubmitting ? (
+          <>
+            <Loader2 className="animate-spin" size={20} />
+            Memproses...
+          </>
+        ) : 'Bayar Sekarang'}
       </button>
 
       <PriceDetailModal

@@ -23,8 +23,8 @@ function App() {
       !selectedService ||
       !orderData.name?.trim() ||
       !orderData.email?.trim() ||
-      !orderData.whatsapp?.trim() ||
-      !orderData.nik?.trim() ||
+      !orderData.phoneNumber?.trim() ||
+      !orderData.identityNumber?.trim() ||
       !orderData.plateNumber?.trim() ||
       !orderData.apiVehicleData
     );
@@ -42,8 +42,8 @@ function App() {
     !selectedService ||
     !orderData.name?.trim() ||
     !orderData.email?.trim() ||
-    !orderData.whatsapp?.trim() ||
-    !orderData.nik?.trim() ||
+    !orderData.phoneNumber?.trim() ||
+    !orderData.identityNumber?.trim() ||
     !orderData.plateNumber?.trim() ||
     !orderData.apiVehicleData
   );

@@ -11,7 +11,7 @@ export const ServiceGrid = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800">Layanan Kami</h2>
 
-        <button 
+        <button
           onClick={() => setView('bantuan')}
           className="hidden md:flex items-center gap-2 bg-white border border-gray-200 pl-3 pr-5 py-2 rounded-full shadow-sm hover:bg-gray-50 transition-all active:scale-95 cursor-pointer"
         >
@@ -19,26 +19,25 @@ export const ServiceGrid = () => {
           <span className="text-[#1A1A1A] font-bold text-[15px]">Bantuan</span>
         </button>
       </div>
-      
+
       <div className="grid grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
         {SERVICES.map((item) => {
-          const isActive = item.id === "1" || item.id === "2" || item.id === "3";
-          
+          const isActive = item.id === "2" || item.id === "3";
+
           return (
-            <div 
+            <div
               key={item.id}
               onClick={() => isActive && setService(item)}
-              className={`bg-white rounded-2xl overflow-hidden transition-all group ${
-                isActive 
-                  ? 'cursor-pointer' 
+              className={`bg-white rounded-2xl overflow-hidden transition-all group ${isActive
+                  ? 'cursor-pointer'
                   : 'cursor-not-allowed opacity-60'
-              }`}
+                }`}
             >
               <div className={`aspect-square rounded-2xl overflow-hidden ${!isActive && 'grayscale'}`}>
-                <img 
+                <img
                   src={item.image}
-                  alt={item.title} 
-                  className={`w-full h-full object-cover transition-transform ${isActive && 'group-hover:scale-110'}`} 
+                  alt={item.title}
+                  className={`w-full h-full object-cover transition-transform ${isActive && 'group-hover:scale-110'}`}
                 />
               </div>
               <div className="pt-3 px-1 space-y-1">

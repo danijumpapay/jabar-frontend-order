@@ -82,6 +82,9 @@ export const PaymentPage = () => {
             serviceTitle={selectedService?.title}
             deliveryFee={deliveryFee}
             address={displayAddress}
+            city={addressData.kota}
+            latitude={addressData.latitude}
+            longitude={addressData.longitude}
             isDetailValid={isDetailValid}
             onPayClick={() => setStep(4)}
           />

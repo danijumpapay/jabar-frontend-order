@@ -2,6 +2,8 @@ export interface AddressData {
     alamatLengkap: string;
     kota: string;
     keterangan: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export interface DeliveryOption {

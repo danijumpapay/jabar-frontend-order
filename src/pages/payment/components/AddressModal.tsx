@@ -30,7 +30,9 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
   const [formData, setFormData] = useState<AddressData>({
     alamatLengkap: initialData.alamatLengkap || '',
     kota: initialData.kota || '',
-    keterangan: initialData.keterangan || ''
+    keterangan: initialData.keterangan || '',
+    latitude: initialData.latitude,
+    longitude: initialData.longitude
   });
   const [errors, setErrors] = useState<Partial<Record<keyof AddressData, string>>>({});
 
@@ -41,8 +43,8 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
 
   const [isLocating, setIsLocating] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number }>({
-    lat: -6.9175,
-    lng: 107.6191
+    lat: initialData.latitude || -6.9175,
+    lng: initialData.longitude || 107.6191
   });
 
   const reverseGeocode = async (lat: number, lng: number, isRetry = false): Promise<boolean> => {
@@ -70,7 +72,9 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
         setFormData(prev => ({
           ...prev,
           alamatLengkap: fullAddress,
-          kota: city
+          kota: city,
+          latitude: lat,
+          longitude: lng
         }));
         setErrors({});
         return true;
@@ -178,7 +182,11 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
       ].slice(0, 3);
       localStorage.setItem('address_history', JSON.stringify(updatedHistory));
       setHistory(updatedHistory);
-      onSave(formData);
+      onSave({
+        ...formData,
+        latitude: coords.lat,
+        longitude: coords.lng
+      });
       onClose();
     }
   };

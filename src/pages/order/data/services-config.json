@@ -14,14 +14,14 @@
       "required": true
     },
     {
-      "id": "whatsapp",
+      "id": "phoneNumber",
       "label": "Nomor WhatsApp",
       "info": "Contoh: 88212345678 (Tanpa angka 0)",
       "type": "tel",
       "required": true
     },
     {
-      "id": "nik",
+      "id": "identityNumber",
       "label": "NIK (Sesuai KTP)",
       "info": "Nomor Induk Kependudukan 16 digit",
       "type": "number",
@@ -35,7 +35,7 @@
       "required": true
     },
     {
-      "id": "no_rangka",
+      "id": "chassisNumber",
       "label": "Nomor Rangka Kendaraan",
       "info": "Masukkan nomor rangka lengkap sesuai STNK",
       "type": "text",
@@ -44,17 +44,17 @@
   ],
   "services": [
     {
-      "id": "1",
+      "id": "2",
       "slug": "stnk-tahunan",
       "extraFields": []
     },
     {
-      "id": "2",
+      "id": "3",
       "slug": "stnk-5-tahun",
       "extraFields": []
     },
     {
-      "id": "3",
+      "id": "5",
       "slug": "blokir-plat",
       "extraFields": []
     }

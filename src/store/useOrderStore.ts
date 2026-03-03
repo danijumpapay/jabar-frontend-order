@@ -13,19 +13,19 @@ interface Service {
 interface OrderData {
   name?: string;
   email?: string;
-  whatsapp?: string;
-  nik?: string;
+  phoneNumber?: string;
+  identityNumber?: string;
   plateNumber?: string;
-  no_rangka?: string;
-  jenisKendaraan?: string;
-  jenisMutasi?: string;
+  chassisNumber?: string;
+  vehicleType?: string;
+  mutationType?: string;
   isDataMatch?: string;
   kotaCabut?: string;
   kotaTujuan?: string;
   ktp?: File | null;
   stnk?: File | null;
   bpkb?: File | null;
-  finalTotal?: number;
+  totalAmount?: number;
   apiVehicleData?: VehicleTaxData;
 }
 
@@ -36,6 +36,7 @@ interface OrderState {
   selectedPromoId: string | null;
   orderData: OrderData;
   orderId: string | null;
+  bookingId: string | null;
 
   setView: (view: OrderState['view']) => void;
   setStep: (step: number) => void;
@@ -43,6 +44,7 @@ interface OrderState {
   setSelectedPromoId: (id: string | null) => void;
   setOrderData: (data: Partial<OrderData>) => void;
   setOrderId: (id: string | null) => void;
+  setBookingId: (id: string | null) => void;
   nextStep: () => void;
   prevStep: () => void;
   resetOrder: () => void;
@@ -56,17 +58,18 @@ export const useOrderStore = create<OrderState>()(
       selectedService: null,
       selectedPromoId: null,
       orderId: null,
+      bookingId: null,
       orderData: {
         name: '',
         email: '',
-        whatsapp: '',
-        nik: '',
+        phoneNumber: '',
+        identityNumber: '',
         plateNumber: '',
-        no_rangka: '',
-        jenisKendaraan: 'Mobil',
-        jenisMutasi: 'Lengkap',
+        chassisNumber: '',
+        vehicleType: 'Mobil',
+        mutationType: 'Lengkap',
         isDataMatch: 'Ya',
-        finalTotal: 0
+        totalAmount: 0
       },
 
       setView: (view) => set({ view }),
@@ -85,14 +88,14 @@ export const useOrderStore = create<OrderState>()(
               : {
                 name: '',
                 email: '',
-                whatsapp: '',
-                nik: '',
+                phoneNumber: '',
+                identityNumber: '',
                 plateNumber: '',
-                no_rangka: '',
-                jenisKendaraan: 'Mobil',
-                jenisMutasi: 'Lengkap',
+                chassisNumber: '',
+                vehicleType: 'Mobil',
+                mutationType: 'Lengkap',
                 isDataMatch: 'Ya',
-                finalTotal: 0
+                totalAmount: 0
               }
           };
         }),
@@ -105,6 +108,8 @@ export const useOrderStore = create<OrderState>()(
         })),
 
       setOrderId: (id) => set({ orderId: id }),
+
+      setBookingId: (id) => set({ bookingId: id }),
 
       nextStep: () =>
         set((state) => ({ step: state.step + 1, view: 'order' })),
@@ -119,17 +124,18 @@ export const useOrderStore = create<OrderState>()(
           selectedService: null,
           selectedPromoId: null,
           orderId: null,
+          bookingId: null,
           orderData: {
             name: '',
             email: '',
-            whatsapp: '',
-            nik: '',
+            phoneNumber: '',
+            identityNumber: '',
             plateNumber: '',
-            no_rangka: '',
-            jenisKendaraan: 'Mobil',
-            jenisMutasi: 'Lengkap',
+            chassisNumber: '',
+            vehicleType: 'Mobil',
+            mutationType: 'Lengkap',
             isDataMatch: 'Ya',
-            finalTotal: 0
+            totalAmount: 0
           }
         }),
     }),
