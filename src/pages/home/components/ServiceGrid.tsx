@@ -5,11 +5,18 @@ import SERVICES from '@/data/services.json';
 export const ServiceGrid = () => {
   const setService = useOrderStore((s) => s.setService);
   const setView = useOrderStore((s) => s.setView);
+  const searchQuery = useOrderStore((s) => s.searchQuery);
+
+  const filteredServices = SERVICES.filter((s) =>
+    s.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <section className="w-full">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Layanan Kami</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+          {searchQuery ? `Hasil Pencarian: "${searchQuery}"` : 'Layanan Kami'}
+        </h2>
 
         <button
           onClick={() => setView('bantuan')}
@@ -20,40 +27,46 @@ export const ServiceGrid = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
-        {SERVICES.map((item) => {
-          const isActive = item.id === "2" || item.id === "3";
+      {filteredServices.length > 0 ? (
+        <div className="grid grid-cols-3 md:grid-cols-5 gap-4 md:gap-6">
+          {filteredServices.map((item) => {
+            const isActive = item.id === "2" || item.id === "3";
 
-          return (
-            <div
-              key={item.id}
-              onClick={() => isActive && setService(item)}
-              className={`bg-white rounded-2xl overflow-hidden transition-all group ${isActive
+            return (
+              <div
+                key={item.id}
+                onClick={() => isActive && setService(item)}
+                className={`bg-white rounded-2xl overflow-hidden transition-all group ${isActive
                   ? 'cursor-pointer'
                   : 'cursor-not-allowed opacity-60'
-                }`}
-            >
-              <div className={`aspect-square rounded-2xl overflow-hidden ${!isActive && 'grayscale'}`}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className={`w-full h-full object-cover transition-transform ${isActive && 'group-hover:scale-110'}`}
-                />
+                  }`}
+              >
+                <div className={`aspect-square rounded-2xl overflow-hidden ${!isActive && 'grayscale'}`}>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className={`w-full h-full object-cover transition-transform ${isActive && 'group-hover:scale-110'}`}
+                  />
+                </div>
+                <div className="pt-3 px-1 space-y-1">
+                  <h3 className={`font-bold text-sm md:text-base leading-tight ${isActive ? 'text-gray-800' : 'text-gray-400'}`}>
+                    {item.title}
+                  </h3>
+                  {!isActive && (
+                    <p className="text-[10px] font-extrabold text-[#27AAE1] uppercase tracking-wider">
+                      Segera Hadir
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="pt-3 px-1 space-y-1">
-                <h3 className={`font-bold text-sm md:text-base leading-tight ${isActive ? 'text-gray-800' : 'text-gray-400'}`}>
-                  {item.title}
-                </h3>
-                {!isActive && (
-                  <p className="text-[10px] font-extrabold text-[#27AAE1] uppercase tracking-wider">
-                    Segera Hadir
-                  </p>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-20 bg-gray-50/50 rounded-[40px] border border-dashed border-gray-200">
+          <p className="text-gray-400 font-bold">Layanan tidak ditemukan</p>
+        </div>
+      )}
     </section>
   );
 };

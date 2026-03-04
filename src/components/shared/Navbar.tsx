@@ -7,11 +7,16 @@ import { Input } from "@/components/ui/input";
 export const Navbar = () => {
   const setView = useOrderStore((s) => s.setView);
   const setStep = useOrderStore((s) => s.setStep);
+  const searchQuery = useOrderStore((s) => s.searchQuery);
+  const setSearchQuery = useOrderStore((s) => s.setSearchQuery);
+  const view = useOrderStore((s) => s.view);
+  const step = useOrderStore((s) => s.step);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleGoHome = () => {
     setView("order");
     setStep(1);
+    setSearchQuery("");
     setIsOpen(false);
   };
 
@@ -19,6 +24,8 @@ export const Navbar = () => {
     setView(view);
     setIsOpen(false);
   };
+
+  const isHomeView = view === "order" && step === 1;
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 font-inter text-left">
@@ -35,9 +42,25 @@ export const Navbar = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
             <Input
               type="text"
-              placeholder="Cari Layanan"
-              className="w-full bg-gray-50 border-gray-200 rounded-xl pl-10 focus-visible:ring-[#27AAE1]"
+              placeholder="Cari Layanan (contoh: Tahunan, 5 Tahunan)"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (!isHomeView) {
+                  setView("order");
+                  setStep(1);
+                }
+              }}
+              className="w-full bg-gray-50 border-gray-200 rounded-xl pl-10 pr-10 focus-visible:ring-[#27AAE1]"
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10"
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -73,20 +96,47 @@ export const Navbar = () => {
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-b border-gray-100 ${isOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
           }`}
       >
-        <div className="px-4 py-6 flex flex-col gap-3">
-          <Button
-            onClick={() => navigateTo("tracking")}
-            className="btn-kang-primary w-full h-12 text-white rounded-xl font-bold transition-all active:scale-[0.98]"
-          >
-            Cek Order
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => navigateTo("tutorial")}
-            className="w-full h-12 border-gray-200 text-gray-600 rounded-xl font-semibold transition-all active:scale-[0.98]"
-          >
-            Tutorial Order
-          </Button>
+        <div className="px-4 py-6 flex flex-col gap-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 z-10" />
+            <Input
+              type="text"
+              placeholder="Cari Layanan"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (!isHomeView) {
+                  setView("order");
+                  setStep(1);
+                }
+              }}
+              className="w-full bg-gray-50 border-gray-200 rounded-xl pl-10 focus-visible:ring-[#27AAE1]"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <Button
+              onClick={() => navigateTo("tracking")}
+              className="btn-kang-primary w-full h-12 text-white rounded-xl font-bold transition-all active:scale-[0.98]"
+            >
+              Cek Order
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => navigateTo("tutorial")}
+              className="w-full h-12 border-gray-200 text-gray-600 rounded-xl font-semibold transition-all active:scale-[0.98]"
+            >
+              Tutorial Order
+            </Button>
+          </div>
         </div>
       </div>
     </nav>

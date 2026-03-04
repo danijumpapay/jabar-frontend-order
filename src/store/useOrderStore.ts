@@ -39,6 +39,7 @@ interface OrderState {
   orderData: OrderData;
   orderId: string | null;
   bookingId: string | null;
+  searchQuery: string;
 
   setView: (view: OrderState['view']) => void;
   setStep: (step: number) => void;
@@ -50,6 +51,7 @@ interface OrderState {
   nextStep: () => void;
   prevStep: () => void;
   resetOrder: () => void;
+  setSearchQuery: (query: string) => void;
 }
 
 export const useOrderStore = create<OrderState>()(
@@ -61,6 +63,7 @@ export const useOrderStore = create<OrderState>()(
       selectedPromoId: null,
       orderId: null,
       bookingId: null,
+      searchQuery: '',
       orderData: {
         name: '',
         email: '',
@@ -102,7 +105,8 @@ export const useOrderStore = create<OrderState>()(
                 totalAmount: 0,
                 finalTotal: 0,
                 paymentDetails: null
-              }
+              },
+            searchQuery: ''
           };
         }),
 
@@ -144,8 +148,11 @@ export const useOrderStore = create<OrderState>()(
             totalAmount: 0,
             finalTotal: 0,
             paymentDetails: null
-          }
+          },
+          searchQuery: ''
         }),
+
+      setSearchQuery: (query) => set({ searchQuery: query }),
     }),
     {
       name: 'KangPajak-order-storage',
@@ -157,7 +164,8 @@ export const useOrderStore = create<OrderState>()(
           stnk: null,
           bpkb: null,
           apiVehicleData: undefined
-        }
+        },
+        searchQuery: undefined
       })
     }
   )
