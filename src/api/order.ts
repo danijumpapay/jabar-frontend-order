@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1';
+const apiClient = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1',
+    headers: {
+        'x-api-key': import.meta.env.VITE_API_KEY || '',
+    },
+});
 
 export interface CreateOrderRequest {
     name: string;
@@ -27,10 +32,9 @@ export interface CreateOrderRequest {
 
 export const createOrder = async (data: CreateOrderRequest) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/orders`, data);
+        const response = await apiClient.post('/orders', data);
         return response.data;
     } catch (error: any) {
-        console.error('Create Order Error:', error);
         return {
             success: false,
             message: error.response?.data?.message || 'Failed to create order'
@@ -40,22 +44,21 @@ export const createOrder = async (data: CreateOrderRequest) => {
 
 export const getOrderDetail = async (bookingId: string) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/orders/${bookingId}`);
+        const response = await apiClient.get(`/orders/${bookingId}`);
         return response.data;
     } catch (error: any) {
-        console.error('Get Order Detail Error:', error);
         return {
             success: false,
             message: error.response?.data?.message || 'Order not found'
         };
     }
 };
+
 export const getPaymentStatus = async (id: string) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/orders/${id}/payment-status`);
+        const response = await apiClient.get(`/orders/${id}/payment-status`);
         return response.data;
     } catch (error: any) {
-        console.error('Get Payment Status Error:', error);
         return {
             success: false,
             message: error.response?.data?.message || 'Failed to get status'
