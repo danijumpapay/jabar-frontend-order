@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api': {
-          target: env.VITE_SAMBARA_BASE_URL || 'https://integration.jumpapay.com/api/v1',
+          target: env.VITE_SAMBARA_BASE_URL,
           changeOrigin: true,
           headers: {
             'Authorization': `Bearer ${env.SAMBARA_TOKEN}`
