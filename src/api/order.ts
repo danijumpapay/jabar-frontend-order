@@ -1,10 +1,14 @@
 import axios from 'axios';
+import { getAccessToken } from './tokenManager';
 
 const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1',
-    headers: {
-        'x-api-key': import.meta.env.VITE_API_KEY || '',
-    },
+});
+
+apiClient.interceptors.request.use(async (config) => {
+    const token = await getAccessToken();
+    config.headers['Authorization'] = `Bearer ${token}`;
+    return config;
 });
 
 export interface CreateOrderRequest {
