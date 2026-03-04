@@ -121,7 +121,17 @@ export const WaitingPaymentPage = () => {
   const { setStep, orderData, resetOrder } = useOrderStore();
   const [openAccordion, setOpenAccordion] = useState<string | null>('atm');
   const [copied, setCopied] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<number>(24 * 60 * 60);
+  const calculateTimeLeft = useCallback(() => {
+    const expiryStr = orderData?.paymentDetails?.expiry_time;
+    if (!expiryStr) return 24 * 60 * 60;
+
+    const expiryDate = new Date(expiryStr.replace(' ', 'T'));
+    const now = new Date();
+    const diff = Math.floor((expiryDate.getTime() - now.getTime()) / 1000);
+    return diff > 0 ? diff : 0;
+  }, [orderData?.paymentDetails?.expiry_time]);
+
+  const [timeLeft, setTimeLeft] = useState<number>(calculateTimeLeft);
   const [isVerifying, setIsVerifying] = useState(false);
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -130,6 +140,10 @@ export const WaitingPaymentPage = () => {
   const paymentDetails = orderData?.paymentDetails;
   const orderId = useOrderStore.getState().orderId;
   const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setTimeLeft(calculateTimeLeft());
+  }, [calculateTimeLeft]);
 
 
   const vaNumber =

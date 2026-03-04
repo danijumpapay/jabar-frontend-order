@@ -35,20 +35,7 @@ export const TrackingPage = () => {
 
 
         if (order.orderStatusId === 7) {
-          useOrderStore.getState().setOrderId(order.orderId);
-          useOrderStore.getState().setBookingId(order.bookingId);
-          useOrderStore.getState().setOrderData({
-            name: order.name,
-            email: order.email,
-            phoneNumber: order.phoneNumber,
-            plateNumber: order.plateNumber,
-            finalTotal: order.finalTotal,
-            paymentDetails: order.paymentDetails
-          });
-          useOrderStore.getState().setStep(4);
-          useOrderStore.getState().setView('order');
-          toast.success("Melanjutkan proses pembayaran...");
-          return;
+          toast.info("Order ditemukan, silakan selesaikan pembayaran");
         }
 
         setOrderData(order);
@@ -73,6 +60,24 @@ export const TrackingPage = () => {
       performSearch(storeBookingId);
     }
   }, []);
+
+  const handlePayNow = () => {
+    if (!orderData) return;
+
+    useOrderStore.getState().setOrderId(orderData.orderId);
+    useOrderStore.getState().setBookingId(orderData.bookingId);
+    useOrderStore.getState().setOrderData({
+      name: orderData.name,
+      email: orderData.email,
+      phoneNumber: orderData.phoneNumber,
+      plateNumber: orderData.plateNumber,
+      finalTotal: orderData.finalTotal,
+      paymentDetails: orderData.paymentDetails
+    });
+    useOrderStore.getState().setStep(4);
+    useOrderStore.getState().setView('order');
+    toast.success("Melanjutkan proses pembayaran...");
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,6 +117,19 @@ export const TrackingPage = () => {
 
       <Card className="rounded-[32px] border-gray-100 shadow-sm overflow-hidden bg-white text-left">
         <CardContent className="p-6 md:p-8">
+          <div className="flex justify-between items-center mb-4">
+            <button
+              onClick={() => {
+                setOrderNumber('');
+                setBookingId('');
+                setStatus('idle');
+                setOrderData(null);
+              }}
+              className="text-xs font-bold text-gray-400 hover:text-red-500 transition-colors"
+            >
+              Reset Pencarian
+            </button>
+          </div>
           <SearchForm
             orderNumber={orderNumber}
             setOrderNumber={setOrderNumber}
@@ -133,9 +151,19 @@ export const TrackingPage = () => {
           <CardContent className="p-6 md:p-10 space-y-10 text-left">
             <div className="flex items-center justify-between border-b border-gray-50 pb-6">
               <h3 className="font-bold text-gray-800 text-lg">Detail Order</h3>
-              <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider bg-blue-50 text-[#27AAE1]`}>
-                {orderData.status}
-              </span>
+              <div className="flex items-center gap-3">
+                {orderData.orderStatusId === 7 && (
+                  <button
+                    onClick={handlePayNow}
+                    className="text-xs font-black px-4 py-2 rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-100 hover:bg-orange-600 transition-all active:scale-95"
+                  >
+                    Bayar Sekarang
+                  </button>
+                )}
+                <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider bg-blue-50 text-[#27AAE1]`}>
+                  {orderData.status}
+                </span>
+              </div>
             </div>
 
             <OrderDetail data={currentOrderDisplayData} orderDate={orderData.createdAt} />
