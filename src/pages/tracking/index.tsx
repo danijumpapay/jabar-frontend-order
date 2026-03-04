@@ -168,6 +168,20 @@ export const TrackingPage = () => {
 
             <OrderDetail data={currentOrderDisplayData} orderDate={orderData.createdAt} />
 
+            {orderData.orderStatusId === 8 && orderData.cancelReason && (
+              <div className="bg-red-50 border border-red-100 rounded-2xl p-6 flex items-start gap-4 animate-in fade-in slide-in-from-left-4 duration-500">
+                <div className="bg-red-500 p-2 rounded-lg text-white mt-1">
+                  <Search size={20} />
+                </div>
+                <div className="space-y-1">
+                  <p className="font-bold text-red-900 text-sm">Informasi Pembatalan</p>
+                  <p className="text-red-700 text-xs leading-relaxed font-medium">
+                    {orderData.cancelReason}
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="py-4">
               <StatusTimeline steps={orderData.steps} />
             </div>
