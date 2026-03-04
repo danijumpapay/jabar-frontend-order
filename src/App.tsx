@@ -18,6 +18,20 @@ function App() {
   const { step, view, setView, setStep, setOrderId, orderData, selectedService } = useOrderStore();
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const orderIdParam = searchParams.get('id');
+
+    if (orderIdParam || window.location.pathname.includes('/cek-pesanan') || window.location.pathname.includes('/tracking')) {
+      setView('tracking');
+      if (orderIdParam) {
+        useOrderStore.getState().setBookingId(orderIdParam);
+      }
+      
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  useEffect(() => {
     if (step >= 4 && (orderData?.paymentDetails || useOrderStore.getState().orderId)) {
       return;
     }

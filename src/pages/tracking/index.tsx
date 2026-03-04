@@ -64,6 +64,13 @@ export const TrackingPage = () => {
   const handlePayNow = () => {
     if (!orderData) return;
 
+    const paymentLink = orderData.paymentDetails?.link_url || orderData.paymentDetails?.payment_url;
+    
+    if (paymentLink) {
+        window.open(paymentLink, '_blank');
+        toast.success("Membuka halaman pembayaran...");
+    }
+
     useOrderStore.getState().setOrderId(orderData.orderId);
     useOrderStore.getState().setBookingId(orderData.bookingId);
     useOrderStore.getState().setOrderData({
@@ -76,7 +83,6 @@ export const TrackingPage = () => {
     });
     useOrderStore.getState().setStep(4);
     useOrderStore.getState().setView('order');
-    toast.success("Melanjutkan proses pembayaran...");
   };
 
   const handleSearch = (e: React.FormEvent) => {

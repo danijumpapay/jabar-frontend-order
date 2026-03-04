@@ -133,6 +133,12 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
           paymentDetails: response.results.paymentDetails
         });
 
+        const linkUrl = response.results.paymentDetails?.link_url || response.results.paymentDetails?.payment_url;
+        
+        if (linkUrl) {
+           window.open(linkUrl, '_blank');
+        }
+
         if (onPayClick) {
           onPayClick();
         } else {
