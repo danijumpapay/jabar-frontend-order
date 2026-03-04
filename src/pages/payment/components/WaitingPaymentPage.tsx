@@ -157,8 +157,8 @@ export const WaitingPaymentPage = () => {
 
   const bankName =
     paymentDetails?.va_numbers?.[0]?.bank?.toUpperCase() ||
-    (paymentDetails?.permata_va_number ? "PERMATA" :
-      paymentDetails?.bca_va_number ? "BCA" :
+    (paymentDetails?.bca_va_number ? "BCA" :
+      paymentDetails?.permata_va_number ? "PERMATA" :
         paymentDetails?.bni_va_number ? "BNI" :
           paymentDetails?.bri_va_number ? "BRI" : "BJB");
 

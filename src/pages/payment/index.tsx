@@ -12,7 +12,7 @@ import { getVehicleType } from '@/lib/order-utils';
 export const PaymentPage = () => {
   const { selectedService, setStep, orderData } = useOrderStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState('BJB');
+  const [selectedMethod, setSelectedMethod] = useState('BCA');
   const [deliveryFee, setDeliveryFee] = useState(29900);
   const [isDetailValid, setIsDetailValid] = useState(true);
 
