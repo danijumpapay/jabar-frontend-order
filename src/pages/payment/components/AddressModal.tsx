@@ -174,18 +174,92 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = () => {
+  const forwardGeocode = async (addressQuery: string): Promise<{lat: number, lng: number; city?: string; displayName?: string} | null> => {
+    if (!addressQuery.trim()) return null;
+    try {
+      let query = addressQuery;
+      if (!query.toLowerCase().includes('jawa barat')) query += ', Jawa Barat';
+      if (!query.toLowerCase().includes('indonesia')) query += ', Indonesia';
+
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=id&limit=1&accept-language=id`;
+      
+      const response = await fetch(url, { 
+        headers: { 'Accept': 'application/json' }
+      });
+      
+      if (!response.ok) throw new Error('Network error');
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        const result = data[0];
+        return { 
+          lat: parseFloat(result.lat), 
+          lng: parseFloat(result.lon),
+          city: result.address?.city || result.address?.town || result.address?.city_district,
+          displayName: result.display_name
+        };
+      }
+      return null;
+    } catch (e) {
+      console.error("Forward geocode error:", e);
+      return null;
+    }
+  };
+
+  const handleManualSearch = async () => {
+    if (!formData.alamatLengkap.trim()) {
+      setErrors({ alamatLengkap: "Masukkan alamat terlebih dahulu" });
+      return;
+    }
+    
+    setIsLocating(true);
+    const result = await forwardGeocode(formData.alamatLengkap);
+    
+    if (result) {
+      setCoords({ lat: result.lat, lng: result.lng });
+      setFormData(prev => ({
+        ...prev,
+        latitude: result.lat,
+        longitude: result.lng,
+      }));
+      toast.success("Pin peta diperbarui berdasarkan alamat");
+    } else {
+      toast.error("Alamat tidak ditemukan di peta. Coba tambahkan nama kota/kecamatan.");
+    }
+    setIsLocating(false);
+  };
+
+  const handleSave = async () => {
     if (validate()) {
+      setIsLocating(true);
+      const isDefaultLocation = coords.lat === -6.9175 && coords.lng === 107.6191;
+      let finalLat = coords.lat;
+      let finalLng = coords.lng;
+
+      if (isDefaultLocation) {
+        const guessedCoords = await forwardGeocode(formData.alamatLengkap);
+        if (guessedCoords) {
+          finalLat = guessedCoords.lat;
+          finalLng = guessedCoords.lng;
+        } else {
+          finalLat = undefined as any;
+          finalLng = undefined as any;
+        }
+      }
+
+      setIsLocating(false);
+
       const updatedHistory = [
         formData,
         ...history.filter(item => item.alamatLengkap !== formData.alamatLengkap)
       ].slice(0, 3);
       localStorage.setItem('address_history', JSON.stringify(updatedHistory));
       setHistory(updatedHistory);
+
       onSave({
         ...formData,
-        latitude: coords.lat,
-        longitude: coords.lng
+        latitude: finalLat,
+        longitude: finalLng
       });
       onClose();
     }
@@ -265,8 +339,19 @@ export const AddressModal = ({ isOpen, onClose, initialData, onSave }: AddressMo
             </div>
 
             <div className="space-y-1">
-              <TooltipLabel label="Alamat Lengkap" required info="Contoh: Perumahan Mahkota Mas Blok O4 RT 002/RW 009 Kec Cidadap" />
-              <textarea rows={3} value={formData.alamatLengkap} onChange={(e) => handleChange('alamatLengkap', e.target.value)} className={`w-full bg-gray-50 border ${errors.alamatLengkap ? 'border-red-500' : 'border-gray-100'} rounded-xl p-3.5 text-sm focus:outline-none focus:border-[#27AAE1] transition-all resize-none mt-2 font-inter`} />
+              <div className="flex justify-between items-end mb-2">
+                <TooltipLabel label="Alamat Lengkap" required info="Contoh: Perumahan Mahkota Mas Blok O4 RT 002/RW 009 Kec Cidadap" />
+                <button 
+                  type="button"
+                  onClick={handleManualSearch}
+                  disabled={isLocating || !formData.alamatLengkap.trim()}
+                  className="text-[10px] font-bold text-[#27AAE1] hover:text-sky-600 transition-colors flex items-center gap-1 bg-sky-50 px-3 py-1.5 rounded-lg border border-sky-100"
+                >
+                  {isLocating ? <Loader2 size={12} className="animate-spin" /> : <MapPin size={12} />}
+                  UPDATE PIN PETA
+                </button>
+              </div>
+              <textarea rows={3} value={formData.alamatLengkap} onChange={(e) => handleChange('alamatLengkap', e.target.value)} className={`w-full bg-gray-50 border ${errors.alamatLengkap ? 'border-red-500' : 'border-gray-100'} rounded-xl p-3.5 text-sm focus:outline-none focus:border-[#27AAE1] transition-all resize-none font-inter`} />
               {errors.alamatLengkap && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1">{errors.alamatLengkap}</p>}
             </div>
 
