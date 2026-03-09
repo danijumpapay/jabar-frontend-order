@@ -51,7 +51,6 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
   const discountAmount = isDiscountVoucher ? Math.round(baseSubtotal * 0.05) : 0;
 
   const totalAmount = baseSubtotal + adminFee + currentPickupFee - discountAmount;
-  const modalTotal = baseSubtotal - discountAmount;
 
   const handleApplyVoucher = () => {
     const code = voucherCode.trim().toLowerCase();
@@ -164,6 +163,8 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
     { label: 'PNB TNKB', value: pnbTnkb },
     { label: 'OPSEN PKB Pokok', value: opsenPokok },
     { label: 'OPSEN PKB Denda', value: opsenDenda },
+    { label: 'Biaya Admin', value: adminFee },
+    { label: 'Ongkir', value: deliveryFee === 0 ? 0 : deliveryFee },
     ...(isDiscountVoucher ? [{ label: 'Diskon Voucher (5%)', value: -discountAmount, isBold: true }] : []),
   ];
 
@@ -309,7 +310,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         isOpen={isPriceModalOpen}
         onClose={() => setIsPriceModalOpen(false)}
         items={priceBreakdown}
-        total={modalTotal}
+        total={totalAmount}
       />
     </div>
   );
