@@ -3,8 +3,9 @@ import * as z from 'zod';
 export const orderSchema = z.object({
   name: z.string().min(1, 'Nama lengkap wajib diisi'),
   phoneNumber: z.string()
-    .min(10, 'Nomor WhatsApp minimal 10 digit')
-    .regex(/^[1-9][0-9]*$/, 'Hanya boleh angka dan tidak boleh diawali angka 0'),
+    .min(9, 'Nomor WhatsApp minimal 9 digit')
+    .max(13, 'Nomor WhatsApp maksimal 13 digit')
+    .regex(/^[8][0-9]*$/, 'Input nomor HP mulai dari angka 8 (Contoh: 812xxxx) dan tidak boleh diawali 0, 62 atau +62'),
   email: z.string().email('Format email tidak valid').min(1, 'Email wajib diisi'),
   identityNumber: z.string().min(16, 'NIK wajib 16 digit').max(16, 'NIK wajib 16 digit'),
   plateNumber: z.string()

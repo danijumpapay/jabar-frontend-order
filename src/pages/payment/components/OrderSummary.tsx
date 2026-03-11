@@ -163,9 +163,6 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
     { label: 'PNB TNKB', value: pnbTnkb },
     { label: 'OPSEN PKB Pokok', value: opsenPokok },
     { label: 'OPSEN PKB Denda', value: opsenDenda },
-    { label: 'Biaya Admin', value: adminFee },
-    { label: 'Ongkir', value: deliveryFee === 0 ? 0 : deliveryFee },
-    ...(isDiscountVoucher ? [{ label: 'Diskon Voucher (5%)', value: -discountAmount, isBold: true }] : []),
   ];
 
   return (
@@ -310,7 +307,7 @@ export const OrderSummary = ({ serviceImage, serviceTitle, deliveryFee, address,
         isOpen={isPriceModalOpen}
         onClose={() => setIsPriceModalOpen(false)}
         items={priceBreakdown}
-        total={totalAmount}
+        total={baseSubtotal}
       />
     </div>
   );

@@ -152,10 +152,19 @@ export const OrderForm = () => {
 
                     {fieldId === 'phoneNumber' ? (
                       <div className="flex gap-2">
-                        <div className="bg-gray-100 border border-gray-200 px-4 py-3.5 rounded-xl text-gray-500 text-sm flex items-center font-bold">+62</div>
+                        <div className="bg-gray-100 border border-gray-200 px-4 py-3.5 rounded-xl text-gray-500 text-sm flex items-center font-bold tracking-tight shadow-sm">+62</div>
                         <Input
                           {...register('phoneNumber')}
-                          className={`${inputStyles} flex-1 ${error ? 'border-red-500' : ''}`}
+                          placeholder=""
+                          maxLength={13}
+                          onChange={(e) => {
+                            let val = e.target.value.replace(/[^0-9]/g, '');
+                            if (val.startsWith('62')) val = val.substring(2);
+                            if (val.startsWith('0')) val = val.substring(1);
+                            e.target.value = val;
+                            register('phoneNumber').onChange(e);
+                          }}
+                          className={`${inputStyles} flex-1 ${error ? 'border-red-500 bg-red-50/50' : ''}`}
                         />
                       </div>
                     ) : field.type === 'select' ? (

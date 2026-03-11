@@ -8,6 +8,7 @@ import { StatusTimeline } from './components/StatusTimeline';
 import { getOrderDetail } from '@/api/order';
 import { toast } from 'sonner';
 import { Search } from 'lucide-react';
+import SERVICES from '@/data/services.json';
 
 export const TrackingPage = () => {
   const { bookingId: storeBookingId, setBookingId } = useOrderStore();
@@ -64,25 +65,40 @@ export const TrackingPage = () => {
   const handlePayNow = () => {
     if (!orderData) return;
 
-    const paymentLink = orderData.paymentDetails?.link_url || orderData.paymentDetails?.payment_url;
+    const paymentDetails = orderData.paymentDetails || (orderData.payments && orderData.payments[0]?.paymentDetails);
+    const paymentLink = paymentDetails?.link_url || paymentDetails?.payment_url || paymentDetails?.linkUrl || paymentDetails?.paymentUrl;
     
-    if (paymentLink) {
+    if (paymentLink && paymentLink.startsWith('http')) {
         window.open(paymentLink, '_blank');
         toast.success("Membuka halaman pembayaran...");
     }
 
-    useOrderStore.getState().setOrderId(orderData.orderId);
-    useOrderStore.getState().setBookingId(orderData.bookingId);
-    useOrderStore.getState().setOrderData({
-      name: orderData.name,
+    const store = useOrderStore.getState();
+    const orderIdToSet = orderData.orderId || orderData.id;
+    
+    const matchedService = SERVICES.find(s => 
+      String(s.id) === String(orderData.serviceId) || 
+      s.title.toLowerCase() === (orderData.serviceName || "").toLowerCase()
+    );
+
+    store.setOrderId(orderIdToSet);
+    store.setBookingId(orderData.bookingId);
+    
+    if (matchedService) {
+      store.setService(matchedService as any);
+    }
+
+    store.setOrderData({
+      name: orderData.name || orderData.customerName,
       email: orderData.email,
       phoneNumber: orderData.phoneNumber,
       plateNumber: orderData.plateNumber,
-      finalTotal: orderData.finalTotal,
-      paymentDetails: orderData.paymentDetails
+      finalTotal: orderData.price || orderData.finalTotal,
+      paymentDetails: paymentDetails,
     });
-    useOrderStore.getState().setStep(4);
-    useOrderStore.getState().setView('order');
+
+    store.setStep(4);
+    store.setView('order');
   };
 
   const handleSearch = (e: React.FormEvent) => {
